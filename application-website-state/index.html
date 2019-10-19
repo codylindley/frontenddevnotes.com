@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/prism.css" />
+    <script src="../js/prism.js"></script>
+    <title>
+      Frontend Developer Notes: on client-side Application/Website state
+    </title>
+  </head>
+
+  <body>
+    <div id="menu">
+      <h3>Notes on client-side Application/Website state</h3>
+      <div id="from">
+        from: <a href="frontenddevnotes.com">frontenddevnotes.com</a>
+      </div>
+      <div id="toc"></div>
+    </div>
+
+    <div id="panel">
+      <div id="menuButton">|||</div>
+
+      <div id="bookPadding">
+        <h1>
+          Notes on client-side Application/Website state
+        </h1>
+
+        <h3 style="margin-top:0px">For neophytes</h3>
+        <section>
+          These notes explore basic concepts around state for websites and web
+          applications loaded into web clients (e.g. a web browsers) and briefly
+          discusses component/locale state v.s. stores and state managers.
+        </section>
+
+        <hr />
+
+        <div id="chapter1" class="chapter">
+          <h2>1 : Basic overview of client-side application/website state</h2>
+
+          <section class="sub">
+            <p>
+              Overview of the meaning of state in the context of websites and
+              web applications loaded into a web client (e.g. a web browser).
+            </p>
+          </section>
+
+          <p>
+            In short, state is the word assigned to the current form of a thing
+            assuming that the thing can change or morph into something
+            different. If a thing doesn't change, it can't have state and is
+            typically considered stateless. If text on a web page already loaded
+            into a web browser never changes, it is stateless. Similarly, if a
+            user interface never changes it is a stateless UI. However, if a
+            thing like a webpage or web application, after first loading it, has
+            a thing about it that changes then it has state.
+          </p>
+
+          <p>
+            Specifically, in the context of webpages and web applications that
+            run in a web browser local state is the data or variables that
+            affects the content and form of a webpage or web application, in any
+            way, during the lifetime of running it in a web browser. Let's
+            unpack this a bit.
+          </p>
+
+          <p>
+            Consider that a static website, with no HTML forms and no hidden
+            content, just viewable images and text is basically a static and
+            stateless thing. You enter a url to a static stateless website and
+            you get exactly the thing at the url in the state that it is in and
+            no data changes after that will change its state. Reload a second
+            later, and you will almost certainly get the exact same thing
+            unchanged. This is not unlike a written page in a book. You buy a
+            physical book, you open it, and the content before you won't ever
+            change. Open the book the next day and most likely the book and the
+            content in the book is changeless. The book, by design, is in a
+            single state and won't ever change. Unless you burn the book, but
+            then you have also broken the original purpose of a book. Its
+            definitely to read, not to burn.
+          </p>
+
+          <p>
+            Now what if a book could change its state, based on data, in a
+            real-time'ish manner? This is basically the revolutionary aspect of
+            the internet and web pages. You get to interact with data that
+            changes based on data in pretty much real-time. However, this means
+            that data or state will have to be managed and in particular the
+            changes and outcomes of data changing will have to be managed.
+          </p>
+
+          <div class="notes">
+            <p>
+              <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+              <li>
+                Originally the world wide web was just a web of static/stateless
+                documents for viewing (versioned, but pretty much though of as
+                book that could be updated and shared quickly). It did not
+                originate as a platform for delivering interactive user
+                interfaces that managed state, especially state inputted by
+                users. History just unfolded this way because the WWW platform
+                became ubiquitous.
+              </li>
+            </ol>
+          </div>
+
+          <p>
+            Now, contrast a completely static stateless website like we just
+            discussed to the web application you might use to do online banking.
+            You open this application in a web browser and immediately the
+            application wants data from you to login. It's asking for you to
+            change the state of the application from not logged in, to logged
+            in. The second the username or password input field goes from empty
+            to containing one typed character you have change the UI state of
+            the HTML input used to collect your login credentials.
+          </p>
+
+          <p>
+            Once you login into a banking application with your credentials the
+            entire state of the application changes from a sign-in/login view to
+            a logged in view. Now that the application has different data the
+            application is going to now be in a different state then before.
+            Because the state of logging in has change the state of what you are
+            looking at has changed.
+          </p>
+
+          <p>
+            Generally speaking you should think of state, or maybe more
+            specifically application state, as any type of data that one has to
+            keep track of during a period of time a user is using a website or
+            web application (aka a session). Some of this state you have to
+            manually take care of. Some of it you get for free, like the fact
+            that you can type characters into an HTML input and the state of the
+            input changes in real-time and you have little to do with fact (i.e.
+            The shadow-dom takes care of it for you).
+          </p>
+
+          <p>
+            To summaries, If you deliver a webpage with a single line of text to
+            a user, the webpage is pretty much state-less and static. Much like
+            a physical book. However, if you sent a user a banking application
+            over the internet, then that application will have states that have
+            to be managed over time (e.g. logged in status, the users location
+            in the application, what the account balance is, which UI is
+            currently being shown and what UI parts are hidden and what UI parts
+            are shown by default etc..).
+          </p>
+
+          <div class="notes">
+            <p>
+              <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+              <li>
+                In the beginning state management for websites and web
+                applications was mostly a backend affair. Today however, most
+                web applications are either one-time-loaded single page
+                application (SPA) or some hybrid version of page reloads and
+                AJAX requests. Either way, as soon web pages and web
+                applications get reduced to some degree of a thick/smart web
+                client the runtime will have to have a mechanism to deal with
+                state as it is being used/changed by the user (as opposed to a
+                dumb client, that offloads state management to the backend, and
+                just requests stuff and does nothing but display that stuff i.e.
+                web 1.0).
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div id="chapter2" class="chapter">
+          <h2>2 : State in relation to time and storage</h2>
+
+          <section class="sub">
+            <p>
+              Thinking about state in an application based on life span of state
+              and where it is stored and for how long.
+            </p>
+          </section>
+
+          <h3>2.1 : Non-lasting state (aka ephemeral state)</h3>
+
+          <p>
+            If you enter a few characters into an HTML input on a web page you
+            have change the state of the input. In fact, even focusing the input
+            likely changes the state of the inputs UI from unfocused to focused.
+            What happens then if the user moves to a different part of the
+            website or application and then returns to the same UI. If the input
+            is unfocused and the characters are gone, then this is typically
+            consider non-lasting state.
+          </p>
+
+          <h3>2.1 : Short-lasting state (aka session state)</h3>
+
+          <p>
+            Short-lasting state typically has a pre-conceived end, but does not
+            really fall into the category of non-lasting state. Short-lasting
+            state is the type of state that the developer of a system purposely
+            keeps track of for a short period of time with a known expiration
+            date.
+          </p>
+
+          <p>
+            For example, the moment you login to a website or web application
+            you have entered data that changes the state of the website or web
+            application. For a limited duration of time, that logged-in state is
+            stored and you remain logged into the website as you continue to
+            use/change the state of the application, but a known end to the
+            storage of that state has already been determined.
+          </p>
+
+          <h3>2.2 : Long lasting state (aka permanently stored state)</h3>
+
+          <p>
+            Contrasted to short lasting state long lasting state is typically
+            data that is stored indefinitely until it is specifically deleted at
+            a unknown time (i.e. anytime). If you enter data into a website or
+            web application and that data is stored in some manner until you
+            specifically (directly or indirectly) remove that data this is
+            typically consider long lasting state. Long lasting state can be as
+            simple as the last view/location of the UI a user was using or a
+            simple set of data like drafts from a checking account. Basically,
+            if you have logic, to save state for an indefinite amount of time,
+            until that data is removed, it is likely long lasting state.
+          </p>
+        </div>
+
+        <div id="chapter3" class="chapter">
+          <h2>
+            3 : Organizing state by scope relevancy (i.e. what/who needs this
+            state)
+          </h2>
+
+          <section class="sub">
+            <p>
+              The nature of state in terms of time and storage is only one facet
+              of state as discussed in the previous chapter. However, another
+              facet of state or way to organize it, is defining who needs access
+              to it and for how long. Often, developers will divide state into
+              Global state and Relative state. These catagories can be helpful
+              when managing a lot of state.
+            </p>
+          </section>
+
+          <h3>3.1 : Global State (aka Complex State)</h3>
+
+          <p>
+            Global state is typically, but not always long lasting state that
+            needs to be accessible from every part of your application. Examples
+            of global state could be session state, entity state (aka Domain or
+            Data or Model or Business Logic state), communication state, and
+            location state.
+          </p>
+
+          <ul>
+            <li>
+              Session state: State about the users current interaction with the
+              website or application. Typically session state can be
+              short-lasting or long-lasting.
+            </li>
+            <li>
+              Entity (aka Domain or Data or Business Logic or Model state): A
+              banking apps Entity state could be the account information or
+              ledger for the banking account. Typically entity state is long
+              lasting state.
+            </li>
+            <li>
+              Communication state: State concerned with communication to
+              non-local content. Typically entity state can be non-lasting,
+              short-lasting, or long lasting state.
+            </li>
+            <li>
+              Location state: where the user is in the website or application
+              and how the url effects the state of things the user is doing at a
+              specific location. Typically location state can be short-lasting
+              or long-lasting.
+            </li>
+          </ul>
+
+          <p>
+            Global state is typically stored in global state "Stores" (e.g.
+            globally accessible immutable data). Once an application requires a
+            large quantity of state, with complex dependencies (X state depends
+            on Y state), developers will often start to use a state manager like
+            Redux or Mobx.
+          </p>
+
+          <h3>3.2 : Relative State (aka Local state or component state)</h3>
+
+          <p>
+            Relative state is called relative state because the state is not
+            typically required to be accessible to the entire application and is
+            likely relative or local to a part of the application but not
+            typically all of it, all the time. Relative state is typically label
+            as view/UI state, but it can include relative state that is
+            non-lasting, short-lived, or even long lasting. Relative state is
+            stored in the client as close as possible to the part(s) of the app
+            that need it. That is why it is called relative, because it is
+            relative to something specific. In a React application this could be
+            the internal state of a component or state that is consumed from a
+            close by ancestral component (aka container component or smart
+            component).
+          </p>
+
+          <div class="notes">
+            <p>
+              <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+              <li>
+                In a React application when state reaches the top of the
+                component tree in a React application, if one is practicing the
+                notion of lifting state and lifting it only as high as needed,
+                then one is conceding that the state is global if it reaches the
+                top of the tree. At this point, the nature of the state changes
+                from relative state to global state.
+              </li>
+            </ol>
+          </div>
+
+          <p>
+            The line between global state and relative state can be a very
+            subjective practice. Some think about state only in terms of global
+            state stores. Others think only in terms of relative state. Many
+            developers advocate and will use both, based on the nature of the
+            state being either global or relative.
+          </p>
+        </div>
+
+        <div id="chapter4" class="chapter">
+          <h2>
+            4 : Third-party state managers (e.g. Flux, Redux, Mobx, Apollo
+            Client, unstated etc.) v.s. component state (e.g. React component
+            state)
+          </h2>
+
+          <section class="sub">
+            <p>
+              What is the different between third-party state managers and
+              component state?
+            </p>
+          </section>
+
+          <p>
+            Fundamentally both third-party state managers and component state
+            solve similar problems, but they both have drawbacks based on the
+            size of your component tree. One could use only a state manager, but
+            then relative state may get shoved through its lens. One could only
+            use component state but then global state may get shoved through its
+            lens. Both of these situations are not ideal.
+          </p>
+
+          <p>
+            State managers solve global state issues really well and side step
+            prop drilling while adding boilerplate and complexity (e.g. action,
+            action creator, dispatcher, reducer, store). Doing relative state
+            choirs with state managers can make a really big mess.
+          </p>
+          <p>
+            Component state solves relative state issues really well but suffers
+            from prop drilling issues as state is lifted, which results in the
+            use of additional patterns/API's to fix prop drilling issues
+            (context, HOC, Render props etc..), which result in boilerplate and
+            complexity. Doing global state choirs with component state can make
+            a really big mess as well.
+          </p>
+
+          <p>
+            The correct answer for a large complex application is likely a
+            combination of the two types of state used wisely and accompanied by
+            a concrete implementation standard so messes are minimized and
+            implementation can be maintained and scaled over time. (i.e. strick,
+            organized, and maintained conventions of use).
+          </p>
+        </div>
+
+        <div id="chapter5" class="chapter">
+          <h2>5 : State Stores</h2>
+
+          <section class="sub">
+            <p>
+              Understanding how a state store relates to state itself.
+            </p>
+          </section>
+
+          <p>
+            State managers (e.g. Redux, Flux, or Mobx) typically store state in
+            a state store. Not all state managers have the same understanding of
+            a state store. But, basically, a state store is state wrapped with
+            an interface (often just a pattern) for CRUD'ing state. A store is
+            not state itself, a store houses the state. State managers update a
+            store in very specific way so that any component/view using the
+            state from a store always gets the most recent state. Some store
+            managers think of state as a single store (e.g. Redux) that holds
+            all state (i.e. a massive state tree) while others think of state
+            existing in several different stores (i.e. Flux).
+          </p>
+        </div>
+
+        <div id="chapter6" class="chapter">
+          <h2>6 : Derived or computed values from state</h2>
+
+          <section class="sub">
+            <p>
+              State should only be made up of the bare minimum things that
+              change over time excluding things that can be derived or computed
+              from minimal state seeds.
+            </p>
+          </section>
+
+          <p>
+            A derived value is a value that is a result of other parts of state.
+            For example the first name (e.g. "Pat") and last name (e.g.
+            "Jenson") of a user might be actual state, but the full name (e.g.
+            "Pat Jenson") is a derivation of two pieces of state. The full name
+            itself is not state it is a derivation of state.
+          </p>
+
+          <p>
+            Another example might the total number of completed todos in a todo
+            application. This number is computed from the list of todos not
+            stored as state itself.
+          </p>
+
+          <p>
+            Derived values are typically computed at runtime and are consider
+            artifacts. Thus, derived/computed values are not typically consider
+            state.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/slideout.min.js "></script>
+    <script src="../js/jquery-3.3.1.slim.min.js "></script>
+
+    <script>
+      // Create slide out TOC
+      var slideout = new Slideout({
+        panel: document.getElementById("panel"),
+        menu: document.getElementById("menu"),
+        padding: 356,
+        tolerance: 70
+      });
+
+      // Create TOC dynamically from content
+      jQuery(".chapter").each(function(index) {
+        jQuery("h2", "#chapter" + (index + 1)).each(function(i) {
+          $(this).attr("id", index + 1);
+          $("#toc").append(
+            '<h5><a href="#' + (index + 1) + '">' + $(this).html() + "</a></h5>"
+          );
+        });
+
+        jQuery("h3", "#chapter" + (index + 1)).each(function(i) {
+          $(this).attr("id", index + 1 + "." + (i + 1));
+          $("#toc").append(
+            '<h6><a href="#' +
+              (index + 1) +
+              "." +
+              (i + 1) +
+              '">' +
+              $(this).html() +
+              "</a></h6>"
+          );
+        });
+      });
+
+      jQuery("#panel").on(
+        "click",
+        "a:not(.codesandboxlink a, .toolbar a)",
+        function() {
+          window.open($(this).attr("href"));
+          return false;
+        }
+      );
+
+      // create link to codesandob
+      jQuery(".line-numbers:has(.language-js)")
+        .not(":has(.noRun)")
+        .before(
+          '<div class="codesandboxlink"><a href="#">run/edit in codesandbox.io</a></div>'
+        );
+
+      // create event handler for codesandbox link
+      jQuery("#panel").on("click", ".codesandboxlink a", function(e) {
+        const code = $(this)
+          .parent()
+          .next(".code-toolbar:has(.language-js)")
+          .find("code")
+          .text();
+        var newWindow = window.open("", "_blank");
+        fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            files: {
+              "index.js": {
+                content: code
+              },
+              "index.html": {
+                content:
+                  '<script src="./node_modules/babel-polyfill/dist/polyfill.js"><\/script><script src="https://unpkg.com/core-js-bundle@3.0.0-beta.3/index.js"><\/script><script src="index.js"><\/script>'
+              },
+              ".babelrc": {
+                content: {
+                  presets: ["env", "stage-0"]
+                }
+              },
+              "package.json": {
+                content: {
+                  name: "ES2015+ Enlightenment Code Example",
+                  version: "1.0.0",
+                  description: "Simple Parcel/Babel Sandbox",
+                  main: "index.html",
+                  scripts: {
+                    start: "parcel index.html --open",
+                    build: "parcel build index.html"
+                  },
+                  dependencies: { "babel-polyfill": "6.26.0" },
+                  devDependencies: {
+                    "parcel-bundler": "^1.12.3",
+                    "babel-preset-env": "^1.7.0",
+                    "babel-preset-stage-0": "^6.24.1"
+                  }
+                }
+              }
+            }
+          })
+        })
+          .then(x => x.json())
+          .then(data => {
+            newWindow.location.href =
+              "https://codesandbox.io/embed/" +
+              data.sandbox_id +
+              "?forcerefresh=1&eslint=1&expanddevtools=1&hidenavigation=1&module=%2Findex.js";
+          });
+        e.preventDefault();
+      });
+
+      // toggle TOC from hamburger icon
+      document
+        .querySelector("#menuButton")
+        .addEventListener("click", function() {
+          slideout.toggle();
+        });
+
+      // toggle TOC on window resize
+      window.addEventListener("resize", resizeThrottler, false);
+      var resizeTimeout;
+      function resizeThrottler() {
+        // ignore resize events as long as an actualResizeHandler execution is in the queue
+        if (!resizeTimeout) {
+          resizeTimeout = setTimeout(function() {
+            resizeTimeout = null;
+            actualResizeHandler();
+
+            // The actualResizeHandler will execute at a rate of 15fps
+          }, 66);
+        }
+      }
+      function actualResizeHandler() {
+        if (window.innerWidth > 1036) {
+          slideout.open();
+        } else {
+          slideout.close();
+        }
+      }
+
+      // open TOC on load if window is wide enough
+      window.addEventListener("load", function(event) {
+        if (window.innerWidth > 1036) {
+          slideout.open();
+        } else {
+          slideout.close();
+        }
+      });
+    </script>
+  </body>
+</html>

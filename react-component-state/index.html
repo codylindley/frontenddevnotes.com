@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/prism.css" />
+    <script src="../js/prism.js"></script>
+    <title>Frontend Developer Notes: on React Component State Management</title>
+  </head>
+
+  <body>
+    <div id="menu"><h3>Notes on React Component State Management</h3><div id="from">from: <a href="frontenddevnotes.com">frontenddevnotes.com</a></div><div id="toc"></div></div>
+
+    <div id="panel">
+      <div id="menuButton">|||</div>
+
+      <div id="bookPadding">
+        <h1>
+          Notes on Using React Component State
+        </h1>
+
+        <h3 style="margin-top:0px">For Intermediate React Developers</h3>
+        <section>
+          These notes explore the state mechanism provided by React (<code>.setState()</code>) and what might lead a developer to replace or add too it an additional third-part state manager (Flux > Redux, Mobx etc.)
+        </section>
+
+        <hr />
+
+        <div id="chapter1" class="chapter">
+          <h2>1 : Brief overview of local component state</h2>
+
+          <section class="sub">
+            <p>
+              This will briefly outline how state is used within a React component.
+            </p>
+          </section>
+
+          <p>
+            React component state (aka local state) is ideally encapsulated to a
+            component and typically represents anything about the UI that
+            changes over time. When building a basic counter UI the only part of
+            the UI that changes is the count. Thus, if we were to build a
+            counter component, minimally the component would have a <code>count</code> state.
+          </p>
+
+          <p>This is an example of a Counter component written as a React class component using a count state:</p>
+
+          <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/priceless-wing-wb5lf?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
+
+    <pre class="line-numbers"><code class="language-js noRun">
+import React, { Component } from &#34;react&#34;;&#10;&#10;export default class Counter extends Component {&#10;  state = {&#10;    count: 0&#10;  };&#10;&#10;  handleIncrement = () =&#62; {&#10;    this.setState({&#10;      count: this.state.count + 1&#10;    });&#10;  };&#10;&#10;  handleDecrement = () =&#62; {&#10;    this.setState({&#10;      count: this.state.count - 1&#10;    });&#10;  };&#10;&#10;  reset = () =&#62; {&#10;    this.setState({&#10;      count: 0&#10;    });&#10;  };&#10;&#10;  render() {&#10;    const { count } = this.state;&#10;    return (&#10;      &#60;section className=&#34;Counter&#34;&#62;&#10;        &#60;h1&#62;Count: {count}&#60;/h1&#62;&#10;        &#60;button onClick={this.handleIncrement} className=&#34;full-width&#34;&#62;&#10;          Increment&#10;        &#60;/button&#62;&#10;        &#60;button onClick={this.handleDecrement} className=&#34;full-width&#34;&#62;&#10;          Decrement&#10;        &#60;/button&#62;&#10;        &#60;button onClick={this.reset} className=&#34;full-width&#34;&#62;&#10;          Reset&#10;        &#60;/button&#62;&#10;      &#60;/section&#62;&#10;    );&#10;  }&#10;}
+
+</pre></code>
+
+          <p>As of React 16.8 a functional component needing state can also be written using React Hooks and does not require the use of JavaScript Class Syntax.</p>
+
+          <p>The example below is the Counter component above re-written as a React function component using a count state (via React Hooks):</p>
+
+          <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/nice-hypatia-fdj5c?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
+
+<pre class="line-numbers"><code class="language-js noRun">
+import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#62; {&#10;  const [count, setCount] = useState(0);&#10;&#10;  const handleIncrement = () =&#62; {&#10;    setCount(count + 1);&#10;  };&#10;&#10;  const handleDecrement = () =&#62; {&#10;    setCount(count - 1);&#10;  };&#10;&#10;  const reset = () =&#62; {&#10;    setCount(0);&#10;  };&#10;&#10;  return (&#10;    &#60;section className=&#34;Counter&#34;&#62;&#10;      &#60;h1&#62;Count: {count}&#60;/h1&#62;&#10;      &#60;button onClick={handleIncrement} className=&#34;full-width&#34;&#62;&#10;        Increment&#10;      &#60;/button&#62;&#10;      &#60;button onClick={handleDecrement} className=&#34;full-width&#34;&#62;&#10;        Decrement&#10;      &#60;/button&#62;&#10;      &#60;button onClick={reset} className=&#34;full-width&#34;&#62;&#10;        Reset&#10;      &#60;/button&#62;&#10;    &#60;/section&#62;&#10;  );&#10;}&#10;&#10;export default Counter;
+      </pre></code>
+
+      <div class="notes">
+
+          <p>
+              <strong>Keep In Mind:</strong>
+          </p>
+          <ol>
+              <li>The purpose of component/local state, within a component, is so that React can re-run what a component renders, even child components, when state changes.</li>
+              <li>Non-class components using React hooks are not a full replacement for class component state. </li>
+          </ol>
+      </div>
+
+        </div>
+
+        <div id="chapter2" class="chapter">
+          <h2>2 : Passing state to child components via <code>props</code></h2>
+
+          <section class="sub">
+            <p>
+              These notes discuss the passing of state from a parent component to child components.
+            </p>
+          </section>
+
+          <p>Adding state to a component isn't a complex or boilerplate filled exercise. However, React has this notation of passing state down to components using <code>props</code>. And this practice is a massive slippery slop when dealing with large component trees that have to scale. In fact encapsulating state to the inside of a component, while advertised as the ideal, is pragmatically never the reality when dealing with a complex web application. It seems to me, that an application doesn't have to grow that big before one has to start lifting state up, only to pass it back down via <code>props</code>. The idea that one can keep scope encapsulate is a nice idea, and when you can do it you should, but this isn't solving boilerplate state management issues in large React applications.</p>
+
+      <p>Taking the Counter component introduced in section 1 of these notes, and the idea of lifting state, the counter code can be re-written so that the state is lifted up to a single ancestral component. The React recommend way to write this component, taking full advantage of reusable "dumb" components (aka presentational components), would be to lift state up to a common "smart" container component (can't find one, then create a container component) where state can be stored in a ancestral/parent component and sent down to dumb/presentational components. Here is an example of such a re-write:</p>
+
+      <iframe src="https://codesandbox.io/embed/staging-bash-tpyxw?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounterContainer.js" title="staging-bash-tpyxw" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
+      <p>Sharing state with child components isn't that complicated. At the end of the day, all one is doing is passing JavaScript references downward. And when communicating these ideas with a couple of components in the context of a simple counter UI the idea of lifting state can come across as rather strait forward.</p>
+
+      <p>However, what happens when one is not dealing with a couple of components but thousands? What happens if we need state available to all components and the top most component in the component tree is the only option? What if our application is filled with state and we have layers and layers of smart container components spread all over the tree requiring the passing of state from not just one or two components but through potentially 20 or 30 components (i.e. prop drilling)? </p>
+
+   <p>The application below demonstrates a slightly larger than Counter example of a growing a React application with lifted state. Study the applications usage of state. Specifically where state is located and how one has to manually keep moving state downwards to children at different points in the component tree to keep it relative to the components that use it. After examining all the usages of state spread through out the packing application now imagine using only component state, like that which is demonstrated in the packing app, for an application with thousands of components with different types of state (i.e. global v.s. relative) living different life spans (i.e. non-lasting, short-lasting, long-lasting).</p>
+
+   <iframe src="https://codesandbox.io/embed/admiring-jang-tk5qc?fontsize=14&hidenavigation=1&module=%2Fsrc%2FApplication.js" title="admiring-jang-tk5qc" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+        
+        <p>React development can get messy fast in these situations. And, even if you don't think this is messy in comparison to the messes possible, it can still be extremely painful to develop and maintain a React application where state has to be passed around hundreds even possibly thousands of times with manual boilerplate glue.</p>
+
+        <div class="notes">
+
+            <p>
+                <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+                <li>Lifting state isn't a strait forward affair. Deciding when to inject or always injecting a smart container over simply leveraging components already in the tree is a subjective implementation practice. One can put conventions around it, but honestly most developers fail at creating standards upfront and then holding themselves and a team to these standards. For this reason many grab a third party management system hoping this will act as documentation/standards for state management. In my experience, this only pushes the problem of being organized and adopting coding standards specifically for state management down the road. Basically, bolting on a third-party state management system, without clearly enforcing coding standards/conventions for state management within the context of your unique application, results in worsening the maintenance and scalability of a code base in terms of state management. </li>
+                <li>Using only component state in a web applications will result in tedious, repetitive, and manual coding and code reading (i.e. state down, events/functions calls up). But those who can accept this fact, do so arguing that they gain a simplistic and explicate state architecture at the cost of prop drilling. The cost still cost, even if the cost is the cost of the context api, HOC patterns, and relative props boiler plate. </li>
+                <li>The "State Container Pattern" is the name of the pattern used to lift state to a ancestral component. The ideas is that one will lift state up to a ancestral component whose only purpose may be state management while also keeping that state pushed down as far as possible in the component tree, attempting to keep it as close to the component(s) as possible that use the state. When you start lifting state dumb or presentation components come into play (thus, re-use comes into play too e.g. a button component). Don't let the fact that React is often sold as an encapsulated state-full view be lost on you. It really isn't in practice given even a slightly non-trivial implementation of React has to face the issue of state management in a tree of components where state is anything but encapsulated to a single component (e.g. see packing app).</li>
+            </ol>
+        </div>
+
+        </div>
+
+        <div id="chapter3" class="chapter">
+          <h2>3 : Local component state pains and solutions</h2>
+
+          <section class="sub">
+            <p>
+              As a component tree grows lifting state comes at a cost. This section notes costs and discusses some of the solutions.
+            </p>
+          </section>
+
+          <h3>3.1 : Global/Shared component state</h3>
+
+          <p>If you want to share the same state with potentially any component in the tree you will have to lift it all the way to the top of the tree. But, then you just found yourself in prop drilling hell. It is at this point you live with prop drilling hell, reach for a third-party state management solution, or try and use the React context API (maybe even React Hooks) to move data through the component tree without having to pass down props manually at every level.  </p>
+
+          <h3>3.2 : Re-usable component state</h3>
+
+          <p>If you want to re-use state then one can use the HOC pattern to wrap state around another component.</p>
+
+          <h3>3.3 : </h3>
+
+          <p></p>
+
+
+        </div>
+
+        <div id="chapter4" class="chapter">
+          <h2>4 : Dealing with Computed/Derived values when using local component state</h2>
+
+          <section class="sub">
+            <p>
+
+            </p>
+          </section>
+        </div>
+
+        <div id="chapter5" class="chapter">
+          <h2>5 : State Managers</h2>
+
+          <section class="sub">
+            <p>
+              
+            </p>
+          </section>
+        </div>
+
+        <div id="chapter6" class="chapter">
+            <h2>References</h2>
+  
+            <section class="sub">
+              <p>
+                These external resources have been either directly or indirectly used in the creation of these notes.
+              </p>
+            </section>
+<ul>
+  <li>
+    The Counter and Packing application were taken, with slight modifications, from the course, <a href="https://frontendmasters.com/courses/react-state/">"Advanced State Management in React (feat. Redux and MobX)"</a> by Steve Kinney
+  </li>
+  <li><a href="https://kentcdodds.com/blog/application-state-management-with-react">Application State Management with React</a></li>
+  <li><a href="https://roadtoreact.com/course-details?courseId=TAMING_THE_STATE">Taming the State in React</a></li>
+</ul>
+
+          </div>
+      </div>
+    </div>
+
+    <script src="../js/slideout.min.js "></script>
+    <script src="../js/jquery-3.3.1.slim.min.js "></script>
+
+    <script>
+      // Create slide out TOC
+      var slideout = new Slideout({
+        panel: document.getElementById("panel"),
+        menu: document.getElementById("menu"),
+        padding: 356,
+        tolerance: 70
+      });
+
+      // Create TOC dynamically from content
+      jQuery(".chapter").each(function(index) {
+        jQuery("h2", "#chapter" + (index + 1)).each(function(i) {
+          $(this).attr("id", index + 1);
+          $("#toc").append(
+            '<h5><a href="#' + (index + 1) + '">' + $(this).html() + "</a></h5>"
+          );
+        });
+
+        jQuery("h3", "#chapter" + (index + 1)).each(function(i) {
+          $(this).attr("id", index + 1 + "." + (i + 1));
+          $("#toc").append(
+            '<h6><a href="#' +
+              (index + 1) +
+              "." +
+              (i + 1) +
+              '">' +
+              $(this).html() +
+              "</a></h6>"
+          );
+        });
+      });
+
+      jQuery("#panel").on(
+        "click",
+        "a:not(.codesandboxlink a, .toolbar a)",
+        function() {
+          window.open($(this).attr("href"));
+          return false;
+        }
+      );
+
+      // create link to codesandob
+      jQuery(".line-numbers:has(.language-js)")
+        .not(":has(.noRun)")
+        .before(
+          '<div class="codesandboxlink"><a href="#">run/edit in codesandbox.io</a></div>'
+        );
+
+      // create event handler for codesandbox link
+      jQuery("#panel").on("click", ".codesandboxlink a", function(e) {
+        const code = $(this)
+          .parent()
+          .next(".code-toolbar:has(.language-js)")
+          .find("code")
+          .text();
+        var newWindow = window.open("", "_blank");
+        fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            files: {
+              "index.js": {
+                content: code
+              },
+              "index.html": {
+                content:
+                  '<script src="./node_modules/babel-polyfill/dist/polyfill.js"><\/script><script src="https://unpkg.com/core-js-bundle@3.0.0-beta.3/index.js"><\/script><script src="index.js"><\/script>'
+              },
+              ".babelrc": {
+                content: {
+                  presets: ["env", "stage-0"]
+                }
+              },
+              "package.json": {
+                content: {
+                  name: "ES2015+ Enlightenment Code Example",
+                  version: "1.0.0",
+                  description: "Simple Parcel/Babel Sandbox",
+                  main: "index.html",
+                  scripts: {
+                    start: "parcel index.html --open",
+                    build: "parcel build index.html"
+                  },
+                  dependencies: { "babel-polyfill": "6.26.0" },
+                  devDependencies: {
+                    "parcel-bundler": "^1.12.3",
+                    "babel-preset-env": "^1.7.0",
+                    "babel-preset-stage-0": "^6.24.1"
+                  }
+                }
+              }
+            }
+          })
+        })
+          .then(x => x.json())
+          .then(data => {
+            newWindow.location.href =
+              "https://codesandbox.io/embed/" +
+              data.sandbox_id +
+              "?forcerefresh=1&eslint=1&expanddevtools=1&hidenavigation=1&module=%2Findex.js";
+          });
+        e.preventDefault();
+      });
+
+      // toggle TOC from hamburger icon
+      document
+        .querySelector("#menuButton")
+        .addEventListener("click", function() {
+          slideout.toggle();
+        });
+
+      // toggle TOC on window resize
+      window.addEventListener("resize", resizeThrottler, false);
+      var resizeTimeout;
+      function resizeThrottler() {
+        // ignore resize events as long as an actualResizeHandler execution is in the queue
+        if (!resizeTimeout) {
+          resizeTimeout = setTimeout(function() {
+            resizeTimeout = null;
+            actualResizeHandler();
+
+            // The actualResizeHandler will execute at a rate of 15fps
+          }, 66);
+        }
+      }
+      function actualResizeHandler() {
+        if (window.innerWidth > 1036) {
+          slideout.open();
+        } else {
+          slideout.close();
+        }
+      }
+
+      // open TOC on load if window is wide enough
+      window.addEventListener("load", function(event) {
+        if (window.innerWidth > 1036) {
+          slideout.open();
+        } else {
+          slideout.close();
+        }
+      });
+    </script>
+  </body>
+</html>
