@@ -12,15 +12,15 @@
     <link rel="stylesheet" href="../css/prism.css" />
     <script src="../js/prism.js"></script>
     <title>
-      Frontend Developer Notes: on client-side Application/Website state
+      Frontend Developer Notes: on client-side Application & Website state
     </title>
   </head>
 
   <body>
     <div id="menu">
-      <h3>Notes on client-side Application/Website state</h3>
+      <h3>Notes on client-side Application & Website state</h3>
       <div id="from">
-        from: <a href="frontenddevnotes.com">frontenddevnotes.com</a>
+        from: <a href="../index.html">frontenddevnotes.com</a>
       </div>
       <div id="toc"></div>
     </div>
@@ -30,7 +30,7 @@
 
       <div id="bookPadding">
         <h1>
-          Notes on client-side Application/Website state
+          Notes on client-side Application & Website state
         </h1>
 
         <h3 style="margin-top:0px">For neophytes</h3>
@@ -43,7 +43,7 @@
         <hr />
 
         <div id="chapter1" class="chapter">
-          <h2>1 : Basic overview of client-side application/website state</h2>
+          <h2>1 : Basic overview of client-side application & website state</h2>
 
           <section class="sub">
             <p>
@@ -54,13 +54,13 @@
 
           <p>
             In short, state is the word assigned to the current form of a thing
-            assuming that the thing can change or morph into something
-            different. If a thing doesn't change, it can't have state and is
-            typically considered stateless. If text on a web page already loaded
-            into a web browser never changes, it is stateless. Similarly, if a
-            user interface never changes it is a stateless UI. However, if a
-            thing like a webpage or web application, after first loading it, has
-            a thing about it that changes then it has state.
+            (aka a snapshot) assuming that the thing can change or morph into
+            something different. If a thing doesn't change, it can't have state
+            and is typically considered stateless. If text on a web page already
+            loaded into a web browser never changes, it is stateless. Similarly,
+            if a user interface never changes it is a stateless UI. However, if
+            a thing like a webpage or web application, after first loading it,
+            has a thing about it that changes then it has state.
           </p>
 
           <p>
@@ -72,28 +72,23 @@
           </p>
 
           <p>
-            Consider that a static website, with no HTML forms and no hidden
-            content, just viewable images and text is basically a static and
-            stateless thing. You enter a url to a static stateless website and
-            you get exactly the thing at the url in the state that it is in and
-            no data changes after that will change its state. Reload a second
-            later, and you will almost certainly get the exact same thing
-            unchanged. This is not unlike a written page in a book. You buy a
-            physical book, you open it, and the content before you won't ever
+            Consider that the first webpages created had no HTML forms and no
+            hidden content, just viewable images and text. The web page was
+            basically a static and stateless thing. You enter a url to a static
+            stateless web page and what you get is a thing that does not change
+            after loading. This is not unlike a written page in a book. You buy
+            a physical book, you open it, and the content before you won't ever
             change. Open the book the next day and most likely the book and the
             content in the book is changeless. The book, by design, is in a
-            single state and won't ever change. Unless you burn the book, but
-            then you have also broken the original purpose of a book. Its
-            definitely to read, not to burn.
+            single state and won't ever change.
           </p>
 
           <p>
             Now what if a book could change its state, based on data, in a
             real-time'ish manner? This is basically the revolutionary aspect of
-            the internet and web pages. You get to interact with data that
-            changes based on data in pretty much real-time. However, this means
-            that data or state will have to be managed and in particular the
-            changes and outcomes of data changing will have to be managed.
+            the internet and web pages as the world wide web evolved. You get to
+            interact with data that can change almost in real-time, by user
+            engagement.
           </p>
 
           <div class="notes">
@@ -103,7 +98,7 @@
             <ol>
               <li>
                 Originally the world wide web was just a web of static/stateless
-                documents for viewing (versioned, but pretty much though of as
+                documents for viewing (versioned, but pretty much thought of as
                 book that could be updated and shared quickly). It did not
                 originate as a platform for delivering interactive user
                 interfaces that managed state, especially state inputted by
@@ -115,22 +110,16 @@
 
           <p>
             Now, contrast a completely static stateless website like we just
-            discussed to the web application you might use to do online banking.
-            You open this application in a web browser and immediately the
-            application wants data from you to login. It's asking for you to
+            discussed to the web application you might use to do online banking
+            today. You open this application in a web browser and immediately
+            the application wants data from you to login. It's asking for you to
             change the state of the application from not logged in, to logged
             in. The second the username or password input field goes from empty
             to containing one typed character you have change the UI state of
-            the HTML input used to collect your login credentials.
-          </p>
-
-          <p>
-            Once you login into a banking application with your credentials the
-            entire state of the application changes from a sign-in/login view to
-            a logged in view. Now that the application has different data the
-            application is going to now be in a different state then before.
-            Because the state of logging in has change the state of what you are
-            looking at has changed.
+            the HTML input used to collect your login credentials. Once you
+            login into a banking application with your credentials the entire
+            state of the UI changes from a sign-in/login view to a logged in
+            view.
           </p>
 
           <p>
@@ -141,18 +130,18 @@
             manually take care of. Some of it you get for free, like the fact
             that you can type characters into an HTML input and the state of the
             input changes in real-time and you have little to do with fact (i.e.
-            The shadow-dom takes care of it for you).
+            the shadow-dom takes care of it for you).
           </p>
 
           <p>
             To summaries, If you deliver a webpage with a single line of text to
-            a user, the webpage is pretty much state-less and static. Much like
-            a physical book. However, if you sent a user a banking application
-            over the internet, then that application will have states that have
-            to be managed over time (e.g. logged in status, the users location
-            in the application, what the account balance is, which UI is
-            currently being shown and what UI parts are hidden and what UI parts
-            are shown by default etc..).
+            a user, the webpage is pretty much state-less and static even today.
+            Much like a physical book. However, if you sent a user a banking
+            application over the internet, then that application will have
+            states that have to be managed over time (e.g. logged in status, the
+            users location in the application, what the account balance is,
+            which UI is currently being shown and what UI parts are hidden and
+            what UI parts are shown by default etc..).
           </p>
 
           <div class="notes">
@@ -182,8 +171,8 @@
 
           <section class="sub">
             <p>
-              Thinking about state in an application based on life span of state
-              and where it is stored and for how long.
+              Thinking about state in an application based where it is stored
+              and for how long.
             </p>
           </section>
 
@@ -192,10 +181,10 @@
           <p>
             If you enter a few characters into an HTML input on a web page you
             have change the state of the input. In fact, even focusing the input
-            likely changes the state of the inputs UI from unfocused to focused.
-            What happens then if the user moves to a different part of the
-            website or application and then returns to the same UI. If the input
-            is unfocused and the characters are gone, then this is typically
+            changes the state of the inputs UI from unfocused to focused. What
+            happens then if the user moves to a different part of the website or
+            application and then returns to the same UI. If the input is
+            unfocused and the characters are gone, then this is typically
             consider non-lasting state.
           </p>
 
@@ -206,19 +195,15 @@
             really fall into the category of non-lasting state. Short-lasting
             state is the type of state that the developer of a system purposely
             keeps track of for a short period of time with a known expiration
-            date.
+            (e.g. keeping track of everything a user does while they are logged
+            into their online banking site, but once logged out all that state
+            is gone).
           </p>
 
-          <p>
-            For example, the moment you login to a website or web application
-            you have entered data that changes the state of the website or web
-            application. For a limited duration of time, that logged-in state is
-            stored and you remain logged into the website as you continue to
-            use/change the state of the application, but a known end to the
-            storage of that state has already been determined.
-          </p>
-
-          <h3>2.2 : Long lasting state (aka permanently stored state)</h3>
+          <h3>
+            2.2 : Long lasting state (aka permanently stored state or persisted
+            state)
+          </h3>
 
           <p>
             Contrasted to short lasting state long lasting state is typically
@@ -227,10 +212,10 @@
             web application and that data is stored in some manner until you
             specifically (directly or indirectly) remove that data this is
             typically consider long lasting state. Long lasting state can be as
-            simple as the last view/location of the UI a user was using or a
-            simple set of data like drafts from a checking account. Basically,
-            if you have logic, to save state for an indefinite amount of time,
-            until that data is removed, it is likely long lasting state.
+            simple as the last view/location of the UI a user was using or a set
+            of data like drafts from a checking account. Basically, if you have
+            logic, to save state for an indefinite amount of time, until that
+            data is removed, it is likely long lasting state.
           </p>
         </div>
 
@@ -287,28 +272,30 @@
           </ul>
 
           <p>
-            Global state is typically stored in global state "Stores" (e.g.
-            globally accessible immutable data). Once an application requires a
-            large quantity of state, with complex dependencies (X state depends
-            on Y state), developers will often start to use a state manager like
-            Redux or Mobx.
+            Global state is typically stored either in global state "Stores"
+            external to component trees or at the very top of a component tree.
+            Once an application requires a large quantity of global state used
+            by many different component at many different locations in the
+            component tree developers will often start to use a third party
+            state manager like Redux or Mobx to avoid prop drilling and boiler
+            plated create from the avoiding of prop drilling (i.e. context api
+            stuff).
           </p>
 
-          <h3>3.2 : Relative State (aka Local state or component state)</h3>
+          <h3>3.2 : Relative State (aka local state or component state)</h3>
 
           <p>
             Relative state is called relative state because the state is not
             typically required to be accessible to the entire application and is
-            likely relative or local to a part of the application but not
-            typically all of it, all the time. Relative state is typically label
-            as view/UI state, but it can include relative state that is
-            non-lasting, short-lived, or even long lasting. Relative state is
-            stored in the client as close as possible to the part(s) of the app
-            that need it. That is why it is called relative, because it is
-            relative to something specific. In a React application this could be
-            the internal state of a component or state that is consumed from a
-            close by ancestral component (aka container component or smart
-            component).
+            likely relative or local to a part of the application but not all of
+            it all the time. Relative state is typically label as view/UI state,
+            but it can include relative state that is non-lasting, short-lived,
+            or even long lasting. Relative state is stored in the client as
+            close as possible to the part(s) of the app that need it. That is
+            why it is called relative, because it is relative to something
+            specific. In a React application this could be the internal state of
+            a component or state that is consumed from a close by ancestral
+            component (aka a container component or a smart component).
           </p>
 
           <div class="notes">
@@ -318,11 +305,12 @@
             <ol>
               <li>
                 In a React application when state reaches the top of the
-                component tree in a React application, if one is practicing the
-                notion of lifting state and lifting it only as high as needed,
-                then one is conceding that the state is global if it reaches the
-                top of the tree. At this point, the nature of the state changes
-                from relative state to global state.
+                component tree, and one is practicing the notion of lifting
+                state and lifting it only as high as needed, then one is
+                conceding that the state is global because all components can
+                now access the state (via prop drilling or context api). At this
+                point, the nature of the state changes from relative state to
+                global state.
               </li>
             </ol>
           </div>
@@ -332,7 +320,10 @@
             subjective practice. Some think about state only in terms of global
             state stores. Others think only in terms of relative state. Many
             developers advocate and will use both, based on the nature of the
-            state being either global or relative.
+            state being either global or relative (i.e. when relative state
+            reaches the very of the tree, and becomes global, some developers
+            will manage it externally from components with something like Redux,
+            Flux, or Mobx).
           </p>
         </div>
 
@@ -369,9 +360,9 @@
             Component state solves relative state issues really well but suffers
             from prop drilling issues as state is lifted, which results in the
             use of additional patterns/API's to fix prop drilling issues
-            (context, HOC, Render props etc..), which result in boilerplate and
-            complexity. Doing global state choirs with component state can make
-            a really big mess as well.
+            (context api), which result in boilerplate and complexity. Doing
+            global state choirs with component state can make a really big mess
+            as well.
           </p>
 
           <p>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/prism.css" />
+    <script src="../js/prism.js"></script>
+    <title>Frontend Developer Notes: on React Patterns</title>
+  </head>
+
+  <body>
+    <div id="menu">
+      <h3>Notes on React Patterns</h3>
+      <div id="from">
+        from: <a href="frontenddevnotes.com">frontenddevnotes.com</a>
+      </div>
+      <div id="toc"></div>
+    </div>
+
+    <div id="panel">
+      <div id="menuButton">|||</div>
+
+      <div id="bookPadding">
+        <h1>
+          Notes on React Patterns
+        </h1>
+
+        <h3 style="margin-top:0px">For Intermediate React Developers</h3>
+        <section>
+          These notes identify and examine common React component patterns.
+        </section>
+
+        <hr />
+
+        <div id="chapter1" class="chapter">
+          <h2>1 : High-Order Components</h2>
+
+          <section class="sub">
+            <p>
+              This will briefly outline what a HOC is and some common uses of
+              the pattern.
+            </p>
+          </section>
+
+          <h3>1.1 - What is a HOC?</h3>
+
+          <p>
+            A higher order component is a javascript function that takes a React
+            component as an argument and then returns a different component from
+            that function.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/slideout.min.js "></script>
+    <script src="../js/jquery-3.3.1.slim.min.js "></script>
+
+    <script>
+      // Create slide out TOC
+      var slideout = new Slideout({
+        panel: document.getElementById("panel"),
+        menu: document.getElementById("menu"),
+        padding: 356,
+        tolerance: 70
+      });
+
+      // Create TOC dynamically from content
+      jQuery(".chapter").each(function(index) {
+        jQuery("h2", "#chapter" + (index + 1)).each(function(i) {
+          $(this).attr("id", index + 1);
+          $("#toc").append(
+            '<h5><a href="#' + (index + 1) + '">' + $(this).html() + "</a></h5>"
+          );
+        });
+
+        jQuery("h3", "#chapter" + (index + 1)).each(function(i) {
+          $(this).attr("id", index + 1 + "." + (i + 1));
+          $("#toc").append(
+            '<h6><a href="#' +
+              (index + 1) +
+              "." +
+              (i + 1) +
+              '">' +
+              $(this).html() +
+              "</a></h6>"
+          );
+        });
+      });
+
+      jQuery("#panel").on(
+        "click",
+        "a:not(.codesandboxlink a, .toolbar a)",
+        function() {
+          window.open($(this).attr("href"));
+          return false;
+        }
+      );
+
+      // create link to codesandob
+      jQuery(".line-numbers:has(.language-js)")
+        .not(":has(.noRun)")
+        .before(
+          '<div class="codesandboxlink"><a href="#">run/edit in codesandbox.io</a></div>'
+        );
+
+      // create event handler for codesandbox link
+      jQuery("#panel").on("click", ".codesandboxlink a", function(e) {
+        const code = $(this)
+          .parent()
+          .next(".code-toolbar:has(.language-js)")
+          .find("code")
+          .text();
+        var newWindow = window.open("", "_blank");
+        fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            files: {
+              "index.js": {
+                content: code
+              },
+              "index.html": {
+                content:
+                  '<script src="./node_modules/babel-polyfill/dist/polyfill.js"><\/script><script src="https://unpkg.com/core-js-bundle@3.0.0-beta.3/index.js"><\/script><script src="index.js"><\/script>'
+              },
+              ".babelrc": {
+                content: {
+                  presets: ["env", "stage-0"]
+                }
+              },
+              "package.json": {
+                content: {
+                  name: "ES2015+ Enlightenment Code Example",
+                  version: "1.0.0",
+                  description: "Simple Parcel/Babel Sandbox",
+                  main: "index.html",
+                  scripts: {
+                    start: "parcel index.html --open",
+                    build: "parcel build index.html"
+                  },
+                  dependencies: { "babel-polyfill": "6.26.0" },
+                  devDependencies: {
+                    "parcel-bundler": "^1.12.3",
+                    "babel-preset-env": "^1.7.0",
+                    "babel-preset-stage-0": "^6.24.1"
+                  }
+                }
+              }
+            }
+          })
+        })
+          .then(x => x.json())
+          .then(data => {
+            newWindow.location.href =
+              "https://codesandbox.io/embed/" +
+              data.sandbox_id +
+              "?forcerefresh=1&eslint=1&expanddevtools=1&hidenavigation=1&module=%2Findex.js";
+          });
+        e.preventDefault();
+      });
+
+      // toggle TOC from hamburger icon
+      document
+        .querySelector("#menuButton")
+        .addEventListener("click", function() {
+          slideout.toggle();
+        });
+
+      // toggle TOC on window resize
+      window.addEventListener("resize", resizeThrottler, false);
+      var resizeTimeout;
+      function resizeThrottler() {
+        // ignore resize events as long as an actualResizeHandler execution is in the queue
+        if (!resizeTimeout) {
+          resizeTimeout = setTimeout(function() {
+            resizeTimeout = null;
+            actualResizeHandler();
+
+            // The actualResizeHandler will execute at a rate of 15fps
+          }, 66);
+        }
+      }
+      function actualResizeHandler() {
+        if (window.innerWidth > 1036) {
+          slideout.open();
+        } else {
+          slideout.close();
+        }
+      }
+
+      // open TOC on load if window is wide enough
+      window.addEventListener("load", function(event) {
+        if (window.innerWidth > 1036) {
+          slideout.open();
+        } else {
+          slideout.close();
+        }
+      });
+    </script>
+  </body>
+</html>

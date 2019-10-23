@@ -12,17 +12,13 @@
       href="css/flexboxgrid/flexboxgrid.min.css"
       media="all"
     />
+    <link rel="stylesheet" href="css/reset.css" />
     <style>
       h1 {
-        line-height: 1.4rem;
-        -webkit-box-direction: normal;
         text-align: center;
         margin: 0.67em 0;
-        font-family: Gibson, HelveticaNeue-Light, "Helvetica Neue Light",
-          "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-        white-space: nowrap;
         font-size: 4rem;
-        margin: 5rem 0 2rem 0;
+        margin: 5rem 0 0 0;
       }
 
       h2 {
@@ -45,9 +41,12 @@
         height: 200px;
         width: 130px;
         background-color: #ebedef;
-        padding: 10%;
-        text-transform: uppercase;
         display: inline-block;
+      }
+
+      .booktext {
+        display: inline-block;
+        margin: 30% 10% 10% 10%;
       }
     </style>
   </head>
@@ -57,38 +56,38 @@
       <h1 class="hero-headline">Front-end Developer Notes</h1>
 
       <h2>
-        Not an article, not a book, just cliff-like-notes on frontend topics and
-        technologies.
+        Not an article. Not a book. Cliff-like-notes on frontend topics &
+        technologies, craigslist style.
       </h2>
     </header>
 
     <main>
       <section>
-        <h3>JavaScript Applications</h3>
+        <h3>JavaScript Applications:</h3>
 
-        <div class="row around-xs">
-          <div class="col-xs-2">
+        <div class="row around-md">
+          <div class="col-xs-1">
             <a
               class="book"
               href="application-website-state/index.html"
               target="_blank"
             >
-              Application & Website State
+              <span class="booktext"> Application & Website State</span>
             </a>
           </div>
         </div>
       </section>
 
       <section>
-        <h3>React</h3>
+        <h3>React:</h3>
         <div class="row around-xs">
-          <div class="col-xs-2">
+          <div class="col-xs-1">
             <a
               class="book"
               href="react-component-state/index.html"
               target="_blank"
             >
-              React Component State
+              <span class="booktext"> React Component State</span>
             </a>
           </div>
         </div>
