@@ -27,7 +27,7 @@
 
         <h3 style="margin-top:0px">For Intermediate to Advanced React Developers</h3>
         <section>
-          These notes explore the local component state management mechanism provided by React (i.e. <code>this.setState() & this.state</code>, <code>useState()</code>, useReducer()) and what might lead a developer to either replace it all together or augment it with a third-party state manager (Flux > Redux, Mobx etc.)
+          These notes explore the local component state management mechanism provided by React (i.e. <code>this.setState()</code>, <code>this.state</code>, <code>useState()</code>, <code>useReducer()</code>) and what might lead a developer to  augment it with a third-party state manager (Flux > Redux, Mobx etc.) or replace it completely.
         </section>
 
         <hr />
@@ -123,25 +123,25 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
         </div>
 
         <div id="chapter3" class="chapter">
-          <h2>3 : State as props can result in a prop drilling problems</h2>
+          <h2>3 : Sharing state without prop drilling.</h2>
 
           <section class="sub">
             <p>
-              As a component tree grows lifting state comes at a cost. This cost is know as prop drilling.
+              As a component tree grows lifting state comes at a cost. Especially, if the state has to be at the top of the component tree. This cost is know as prop drilling.
             </p>
           </section>
 
-          <p>If you want to share state between components in the component tree you will have to lift state up to a common ancestral components and then pass that state and functions that update state back down via props. If you need global state you will have to lift it all the way to the top of the tree. In either case you have a prop drilling problem unfolding. </p>
+          <p>If you want to share state between components in the component tree you will have to lift state up to a common ancestral components and then pass that state and functions that update state back down via props. If you need sharable global state you will have to lift it all the way to the top of the tree. In either case you have a prop drilling problem unfolding. </p>
             
           <p>It is at this point you either live with prop drilling hell (some claim its explicitness and manually nature resulting in boilerplate hell is a feature) or try and use the React context API to move data through the component tree without having to pass down props manually at every level.</p>
 
-          <p>As an example, I've re-written the previous <code>CounterContainer</code> component to use a <code>CounterStateContext</code> component (i.e. <code>&#60;CounterStateContext.Provider&#62;</code> and <code>&#60;CounterStateContext.Consumer&#62</code>) to pass state from the <code>CounterContainer</code> to sub components avoiding prop drilling on the <code>RandomComponentX</code> and <code>RandomComponentY</code> components.</p>
+          <p>As an example, I've re-written the previous <code>CounterContainer</code> component to use a <code>CounterStateContext</code> component (i.e. <code>&#60;CounterStateContext.Provider&#62;</code> and <code>&#60;CounterStateContext.Consumer&#62</code>) to pass state from the <code>Counter</code> to sub components avoiding prop drilling on the <code>RandomComponentX</code> and <code>RandomComponentY</code> components.</p>
 
-          <iframe src="https://codesandbox.io/embed/nostalgic-sutherland-1c9ix?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounterContainer.js" title="nostalgic-sutherland-1c9ix" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+          <iframe src="https://codesandbox.io/embed/nostalgic-sutherland-1c9ix?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js" title="nostalgic-sutherland-1c9ix" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
           <p>Below I've re-written the above context API example to use React hooks for state and the <code>useContext()</code> hook instead of class component state and consumer component with render prop:</p>
 
-          <iframe src="https://codesandbox.io/embed/silly-northcutt-jnley?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounterContainer.js" title="silly-northcutt-jnley" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+          <iframe src="https://codesandbox.io/embed/silly-northcutt-jnley?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js" title="silly-northcutt-jnley" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
           <div class="notes">
 
@@ -156,8 +156,66 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
 
         </div>
 
+
         <div id="chapter4" class="chapter">
-          <h2>4 : Dealing with Computed/Derived values when using local component state</h2>
+          <h2>4 : Re-using React local state</h2>
+
+          <section class="sub">
+            <p>
+              Outlines how components can re-use state so one is not repeating themselves.
+            </p>
+          </section>
+
+          <p>React local state (as well as any value really) can be re-used using the following three component patterns in React:</p>
+
+          <ul>
+            <li>Higher Order Components (shown for historical purposes)</li>
+            <li>Rendered Props (shown for historical purposes)</li>
+            <li>Hooks (Most prefer custom hook patterns today)</li>
+          </ul>
+
+          <p>Below the <code>CounterContainer</code> example is re-written for each pattern so that the state is not repeated for a second counter.</p>
+
+          <h3>4.1 - Higher Order Component</h3>
+
+          <iframe src="https://codesandbox.io/embed/quizzical-mclaren-v5ge4?fontsize=14&hidenavigation=1&module=%2Fsrc%2FWithCounterState.js" title="quizzical-mclaren-v5ge4" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
+          <h3>4.2 - Render Props</h3>
+
+          <iframe src="https://codesandbox.io/embed/wonderful-tesla-6344p?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounterStateViaRenderProp.js" title="wonderful-tesla-6344p" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
+          <h3>4.3 - Hooks</h3>
+
+          <iframe src="https://codesandbox.io/embed/optimistic-hooks-7pgyw?fontsize=14&hidenavigation=1&module=%2Fsrc%2FuseCounterStateHook.js" title="optimistic-hooks-7pgyw" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+
+          <div class="notes">
+
+            <p>
+                <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+                <li>Today, many are avoiding <a href="https://gist.github.com/heygrady/f9bf3b6dd93fe3d87ba87430fd3c20d5">HOC</a> and render <a href="https://kentcdodds.com/blog/react-hooks-whats-going-to-happen-to-render-props">props patterns</a> in favor of using custom React hooks.</li>
+                <li>Typically the use of hooks has to happen in a function component. But, it is possible to use hooks in a class component via the higher order component pattern (e.g. <a href="https://infinum.co/the-capsized-eight/how-to-use-react-hooks-in-class-components">How to Use React Hooks in Class Components</a> and <a href="https://reacttraining.com/blog/using-hooks-in-classes/">Using Hooks in Classes</a>).</li>
+            </ol>
+        </div>
+
+          </div>
+
+        
+          <div id="chapter5" class="chapter">
+            <h2>5 : Using <code>useReducer</code> for complex state</h2>
+  
+            <section class="sub">
+              <p>
+                Outlines the use of a Redux-like pattern for managing state using the React <code>userReducer()</code> hook.
+              </p>
+            </section>
+
+            <p>Re-write CountContainer to use a reducer</p>
+            </div>
+
+        <div id="chapter6" class="chapter">
+          <h2>6 : Dealing with Computed/Derived values when using local component state</h2>
 
           <section class="sub">
             <p>
@@ -180,29 +238,6 @@ const Counter = () =&#62; {&#10;  const [firstName, setFirstName] = useState(&#3
 
         </div>
 
-        <div id="chapter5" class="chapter">
-          <h2>5 : Re-using state</h2>
-
-          <section class="sub">
-            <p>
-              Outlines how components can re-use state so one is not repeating themselves i.e. sharing state with multiple component.
-            </p>
-          </section>
-
-          <h3>Reusing state using render props in class components</h3>
-
-          <h3>Reusing state using hooks</h3>
-          </div>
-
-          <div id="chapter6" class="chapter">
-            <h2>6 : Using <code>useReducer</code> for complex state </h2>
-  
-            <section class="sub">
-              <p>
-                Outlines the use of a Redux like pattern for managing state using the <code>userReducer</code> hook.
-              </p>
-            </section>
-            </div>
 
 
           <div id="chapter7" class="chapter">
