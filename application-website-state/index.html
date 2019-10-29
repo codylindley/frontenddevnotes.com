@@ -36,7 +36,7 @@
         <h3 style="margin-top:0px">For neophytes</h3>
         <section>
           These notes explore basic concepts around state for websites and web
-          applications loaded into web clients (e.g. a web browsers) and briefly
+          applications loaded into web clients (e.g. web browsers) and briefly
           discusses component/locale state v.s. stores and state managers.
         </section>
 
@@ -65,7 +65,7 @@
 
           <p>
             Specifically, in the context of webpages and web applications that
-            run in a web browser local state is the data or variables that
+            run in a web browser client-side state (aka local state) is the data or variables that
             affects the content and form of a webpage or web application, in any
             way, during the lifetime of running it in a web browser. Let's
             unpack this a bit.
@@ -76,8 +76,8 @@
             hidden content, just viewable images and text. The web page was
             basically a static and stateless thing. You enter a url to a static
             stateless web page and what you get is a thing that does not change
-            after loading. This is not unlike a written page in a book. You buy
-            a physical book, you open it, and the content before you won't ever
+            after loading (except for editions). This is not unlike a written page in a book. You buy
+            a physical book, you open it, and the content before you won't 
             change. Open the book the next day and most likely the book and the
             content in the book is changeless. The book, by design, is in a
             single state and won't ever change.
@@ -195,9 +195,7 @@
             really fall into the category of non-lasting state. Short-lasting
             state is the type of state that the developer of a system purposely
             keeps track of for a short period of time with a known expiration
-            (e.g. keeping track of everything a user does while they are logged
-            into their online banking site, but once logged out all that state
-            is gone).
+            (e.g. keeping track of UI changes, e.g. currently select tab but resets to first tab once the user logs out and then logs back in).
           </p>
 
           <h3>
@@ -278,8 +276,7 @@
             by many different component at many different locations in the
             component tree developers will often start to use a third party
             state manager like Redux or Mobx to avoid prop drilling and boiler
-            plated create from the avoiding of prop drilling (i.e. context api
-            stuff).
+            plated create from the avoiding of prop drilling (i.e. The React context api).
           </p>
 
           <h3>3.2 : Relative State (aka local state or component state)</h3>
@@ -321,7 +318,7 @@
             state stores. Others think only in terms of relative state. Many
             developers advocate and will use both, based on the nature of the
             state being either global or relative (i.e. when relative state
-            reaches the very of the tree, and becomes global, some developers
+            reaches the very top of the tree, and becomes global, some developers
             will manage it externally from components with something like Redux,
             Flux, or Mobx).
           </p>

@@ -27,7 +27,7 @@
 
         <h3 style="margin-top:0px">For Intermediate to Advanced React Developers</h3>
         <section>
-          These notes explore the local component state management mechanism provided by React (i.e. <code>this.setState()</code>, <code>this.state</code>, <code>useState()</code>, <code>useReducer()</code>) and what might lead a developer to  augment it with a third-party state manager (Flux > Redux, Mobx etc.) or replace it completely.
+          These notes explore the local component state management mechanism provided by React (i.e., <code>this.setState()</code>, <code>this.state</code>, <code>useState()</code>, <code>useReducer()</code>) and what might lead a developer to  augment it with a third-party state manager (Flux > Redux, Mobx etc.) or replace it completely.
         </section>
 
         <hr />
@@ -37,7 +37,7 @@
 
           <section class="sub">
             <p>
-              This will briefly outline how state is used within a React component.
+              This will briefly outline how local state is used within a React component.
             </p>
           </section>
 
@@ -46,7 +46,7 @@
             component and typically represents anything about the UI that
             changes over time. When building a basic counter UI the only part of
             the UI that changes is the count. Thus, if we were to build a
-            counter component, minimally the component would have a <code>count</code> state (i.e. the current numeric number representing a count).
+            <code>Counter</code> component, minimally, the component would have a <code>count</code> state (i.e., the current numeric number representing a count).
           </p>
 
           <p>This is an example of a <code>Counter</code> component written as a React class component using a count state:</p>
@@ -58,9 +58,9 @@ import React, { Component } from &#34;react&#34;;&#10;&#10;export default class 
 
 </pre></code>
 
-          <p>As of React 16.8 a functional component needing state can also be written using React Hooks and does not require the use of JavaScript Class Syntax.</p>
+          <p>As of React 16.8 a functional component needing state can also be written using React Hooks and does not require the use of JavaScript class syntax.</p>
 
-          <p>The example below is the <code>Counter</code> component above re-written as a React function component using a count state (via React Hooks):</p>
+          <p>The example below is the <code>Counter</code> component above re-written as a React function component using a count state via React Hooks:</p>
 
           <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/nice-hypatia-fdj5c?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
 
@@ -74,8 +74,8 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
               <strong>Keep In Mind:</strong>
           </p>
           <ol>
-              <li>The purpose of component/local state, within a component, is so that React can re-run what a component renders, even child components, when state changes. For example, if the count of a counter changes from Y number to X number then the UI has to be re-render (i.e. the counter component re-renders itself by running itself again).</li>
-              <li>Non-class components using React hooks are not a complete replacement for class component state. </li>
+              <li>The purpose of component/local state within a component is so that React can re-run what a component renders, even child components, when the state changes. For example, if the count of a counter changes from  X number to Y number, then the UI has to be re-render (i.e., the counter component re-renders itself by re-running the render function obtaining a new value for <code>count</code>).</li>
+              <li>Non-class components using React hooks are not a complete replacement for class component state.</li>
  
           </ol>
       </div>
@@ -83,29 +83,29 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
         </div>
 
         <div id="chapter2" class="chapter">
-          <h2>2 : Passing state to child components via <code>props</code></h2>
+          <h2>2 : Passing state to child components via <code>props</code> (i.e. lifting state)</h2>
 
           <section class="sub">
             <p>
-              These notes discuss the passing of state from a ancestral component to child components.
+              These notes discuss taking state and moving it up in a component tree to then pass it from a ancestral component back down to child components.
             </p>
           </section>
 
-          <p>Adding state to a component isn't a complex or boilerplate filled exercise. However, React has this notation of passing state down to components using <code>props</code>. And this practice is a massive slippery slop when dealing with large component trees that have to scale. In fact encapsulating state to the inside of a component, while advertised as the ideal, is pragmatically never the reality when dealing with a complex web application. It seems to me, that an application doesn't have to grow that big before one has to start lifting state up, only to pass it back down via <code>props</code>. The idea that one can keep scope encapsulate is a nice idea, and when you can do it you should, but this isn't solving boilerplate state management issues in large React applications. State has to get shared and sharing is difficult.</p>
+          <p>Adding state to a component isn't a complicated or boilerplate filled exercise. However, React has this notation of passing state down to components using <code>props</code>. And this practice is a massive slippery slope when dealing with large component trees that have to scale. Encapsulating state to the inside of a component, while advertised as the ideal, is pragmatically never the reality when dealing with a complex web application. It seems to me that an app doesn't have to grow that big before one has to start lifting the state up, only to pass it back down via <code>props</code>. The idea that one can keep scope encapsulate is a nice idea, and when you can do it, you should, but this isn't solving boilerplate state management issues in large React applications. The state has to get shared and sharing is difficult.</p>
 
-      <p>Taking the <code>Counter</code> component introduced in section 1 of these notes, and the idea of lifting state, the counter code can be re-written so that the state is lifted up to a single ancestral component. The React recommend way to write this component, taking full advantage of reusable "dumb" components (aka presentational components), would be to lift state up to a common "smart" container component (can't find one, then create a container component) where state can be stored in a ancestral/parent component and sent down to dumb/presentational components. Here is an example of such a re-write:</p>
+      <p>Taking the <code>Counter</code> component introduced in section 1 of these notes, and the idea of lifting state, the counter code can be re-written so that the state is lifted up to a single ancestral component (i.e. <code>CounterContainer</code>). The React recommend way to write this component, taking full advantage of reusable "dumb" components (aka presentational components), would be to lift state up to a common "smart" container component (can't find one, then create a container component) where state can be stored in a ancestral/parent component and sent down to dumb/presentational components. Here is an example of such a re-write:</p>
 
       <iframe src="https://codesandbox.io/embed/staging-bash-tpyxw?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounterContainer.js" title="staging-bash-tpyxw" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-      <p>Sharing state with child components isn't that complicated. At the end of the day, all one is doing is passing JavaScript references downward. And when communicating these ideas with a couple of components in the context of a simple counter UI the idea of lifting state can come across as rather strait forward.</p>
+      <p>Sharing state with child components isn't that complicated. All one is doing is passing JavaScript references downward. And when communicating these ideas with a couple of components in the context of a simple counter UI, the concept of lifting state can come across as rather straight forward.</p>
 
-      <p>However, what happens when one is not dealing with a couple of components but thousands? What happens if we need state available to all components and the top most component in the component tree is the only option? What if our application is filled with state and we have layers and layers of smart container components spread all over the tree requiring the passing of state from not just one or two components but through potentially 20 or 30 components (i.e. prop drilling)? </p>
+      <p>However, what happens when one is not dealing with a couple of components but thousands? What happens if we need state available to all components, and the topmost component in the component tree is the only option? What if our application is filled with state, and we have layers and layers of smart container components spread all over the tree requiring the passing of state from not just one or two components but through potentially 5 or 10 components (i.e., prop drilling)? </p>
 
-   <p>The application below demonstrates a slightly larger than <code>Counter</code> example of a growing a React application with lifted state. Study the applications usage of state. Specifically where state is located and how one has to manually keep moving state downwards to children at different points in the component tree to keep it relative to the components that use it (i.e. can't keep all state at the top can we?). </p>
+   <p>The application below demonstrates a slightly larger than <code>Counter</code> example of a growing a React application with lifted state. Study the application's usage of state. Specifically, where the state is located and how one has to manually keep moving state downwards to children at different points in the component tree to keep it as relative as possible to the components that use it (i.e., can't keep all local state at the top can we? Wouldn't that make it relative to all components in the tree?). </p>
 
    <iframe src="https://codesandbox.io/embed/admiring-jang-tk5qc?fontsize=14&hidenavigation=1&module=%2Fsrc%2FApplication.js" title="admiring-jang-tk5qc" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
     
-    <p>After examining all the usages of state spread through out the packing application now imagine using only component state, like that which is demonstrated in the packing app, for an application with thousands of components with different types of state (i.e. global v.s. relative) living different life spans (i.e. non-lasting state, short-lasting state, long-lasting state).</p>
+    <p>After examining all the packing apps usage of state imagine now only using component state for an application with thousands of components with different types of state (i.e. global v.s. relative) living different life spans (i.e. non-lasting state, short-lasting state, long-lasting state).</p>
 
         <div class="notes">
 
@@ -113,25 +113,25 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
                 <strong>Keep In Mind:</strong>
             </p>
             <ol>
-                <li>Using only component state and prop drilling in a web applications will result in tedious, repetitive, and manual coding and code reading (i.e. state down, events/functions calls up). But those who can accept this fact, do so arguing that they gain a simplistic and explicate state architecture at the cost of prop drilling. </li>
-                <li>The "State Container Pattern" is the name of the pattern used to lift state to a ancestral component who's only purpose is to hold state. Sometimes that component is already obvious and already available. Other times its not obvious at all. Other times a component has to be inject just to hold state. The idea is that one will lift state up to a ancestral component whose only purpose may be state management while also keeping that state pushed down as far as possible in the component tree, attempting to keep it as close to the component(s) as possible that use the state. When you start lifting state dumb or presentation components come into play (thus, re-use comes into play too e.g. a button component). Don't let the fact that React is often sold as an encapsulated state-full view be lost on you. It really isn't in practice given even a slightly non-trivial implementation of React has to face the issue of state management in a tree of components where state is anything but encapsulated to a single view component (e.g. see packing app).</li>
-                <li>Make sure you completely understand ths statement, "State can be passed down as props to other components. These components can consume the props or pass it even further down to their child components. In addition, child components can receive callback functions in the props from their parent components. These functions can be used to alter the local state of parent components. <strong>Basically props flow down the component tree, state is managed by a component alone and functions can bubble up to alter the state in a component that manages state. The updated state can be passed down as props again</strong>.".</li>
-                <li>It will be easy to confuse, semantically, re-usable state with shared state. In fact, when discussing these topics people will use these terms interchangeably. If you want to stay sane when discussing React state, make sure you call the same state shared by one or more components shared state. And if its shared with all components then it is shared global state. If a component makes use of the same kind of state, then this is re-used state, but not the same state.</li>
+                <li>Using only component state and state lifting container patterns in a React web application will result in tedious, repetitive, and manual coding, editing and code reading (i.e., state down, events/functions calls up). But those who can accept this fact, do so arguing that they gain a simplistic and explicate state architecture at the cost of prop drilling. </li>
+                <li>The "State Container Pattern" is the name of the pattern used to lift state to an ancestral component whose purpose is to hold state. Sometimes that component is already obvious and already available. Other times it's not apparent at all. Other times a component has to be injected into the component tree just to hold state. The idea is that one will lift state up to an ancestral component whose only purpose may be state management while also keeping that state pushed down as far as possible in the component tree, attempting to keep it as close to the component(s) as possible that use the state. When you start lifting state, dumb or presentation, components come into play (thus, re-use comes into play too e.g. a button component). Don't let the fact that React is often sold as an encapsulated state-full view be lost on you. It isn't in practice given even a slightly non-trivial implementation of React has to face the issue of state management in a tree of components where state is anything but encapsulated to a single view component (e.g., see packing app).</li>
+                <li>Make sure you understand this statement entirely, "State can be passed down as props to other components. These components can consume the props or pass it even further down to their child components. In addition, child components can receive callback functions in the props from their parent components. These functions can be used to alter the local state of parent components. <strong>Basically props flow down the component tree, state is managed by a component alone and functions can bubble up to alter the state in a component that manages state. The updated state can be passed down as props again</strong>.".</li>
+                <li>It will be easy to confuse, semantically, re-usable state with shared state. When discussing these topics, people will use these terms interchangeably. If you want to stay sane when discussing React state, make sure you call the same state shared by one or more components shared state. And if it's shared with all components then it is "shared global state". If a component makes use of the same kind of state, then this is "re-used state", but not the same state.</li>
             </ol>
         </div>
 
         </div>
 
         <div id="chapter3" class="chapter">
-          <h2>3 : Sharing state without prop drilling.</h2>
+          <h2>3 : Sharing state without prop drilling (via React context).</h2>
 
           <section class="sub">
             <p>
-              As a component tree grows lifting state comes at a cost. Especially, if the state has to be at the top of the component tree. This cost is know as prop drilling.
+              As a component tree grows, lifting state comes at a cost. Especially if the state has to be at the top of the component tree. The cost is often called, "prop drilling".
             </p>
           </section>
 
-          <p>If you want to share state between components in the component tree you will have to lift state up to a common ancestral components and then pass that state and functions that update state back down via props. If you need sharable global state you will have to lift it all the way to the top of the tree. In either case you have a prop drilling problem unfolding. </p>
+          <p>If you want to share state between components in the component tree, you will have to lift state up to a common ancestral components and then pass that state and functions that update state back down via props. If you need sharable global state you will have to lift it to the top of the tree. In either case you have a prop drilling problem unfolding. </p>
             
           <p>It is at this point you either live with prop drilling hell (some claim its explicitness and manually nature resulting in boilerplate hell is a feature) or try and use the React context API to move data through the component tree without having to pass down props manually at every level.</p>
 
@@ -139,7 +139,7 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
 
           <iframe src="https://codesandbox.io/embed/nostalgic-sutherland-1c9ix?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js" title="nostalgic-sutherland-1c9ix" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
-          <p>Below I've re-written the above context API example to use React hooks for state and the <code>useContext()</code> hook instead of class component state and consumer component with render prop:</p>
+          <p>Below I've re-written the above context API example to use React hooks for state and the <code>useContext()</code> hook instead of a consumer component (i.e. not this <code>&#60;CounterStateContext.Consumer&#62;</code>, but this: <code>const CounterState = React.useContext(CounterStateContext);</code>):</p>
 
           <iframe src="https://codesandbox.io/embed/silly-northcutt-jnley?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js" title="silly-northcutt-jnley" allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb" style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
 
@@ -149,7 +149,7 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
                   <strong>Keep In Mind:</strong>
               </p>
               <ol>
-                  <li>It is not uncommon for developers to solve prop drilling problems by reaching for Redux or Mobx. Some completely replace local state management with these tools while others use a mix of both. Often what is going on is that developers think they can solve all state issue  by externally managing state, but find out that local component state has a very valid place in avoiding boiler plate hell (i.e. creating a value in a store, for a non-lasting UI state value, can result in a lot of boilerplate code).</li>
+                  <li>It is not uncommon for developers to solve prop drilling problems by reaching for Redux or Mobx. Some completely replace local state management with these tools, while others use a mix of both. Often what is going on is that developers think they can solve state issues by externally managing state, but find out that local component state has a very valid place in avoiding boilerplate hell as well. (i.e., creating a value in a store, for a non-lasting UI state value, can result in a lot of boilerplate code).</li>
                   <li>"Context API is a great way to avoid prop-drilling but it isn’t a simple solution. It requires you to do some extra work to take advantage of it. Another caveat is that it tightly couples your component with a context, which means it will be a bit difficult to facilitate reuse." - <a href="How to avoid Prop-drilling in React">How to avoid Prop-drilling in React</a></li>
               </ol>
           </div>
@@ -169,9 +169,9 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
           <p>React local state (as well as any value really) can be re-used using the following three component patterns in React:</p>
 
           <ul>
-            <li>Higher Order Components (shown for historical purposes)</li>
-            <li>Rendered Props (shown for historical purposes)</li>
-            <li>Hooks (Most prefer custom hook patterns today)</li>
+            <li>Higher Order Components (shown for historical purposes, many avoid this pattern today)</li>
+            <li>Rendered Props (shown for historical purposes, may avoid this pattern today)</li>
+            <li>Custom Hooks (Most devs custom hook patterns today)</li>
           </ul>
 
           <p>Below the <code>CounterContainer</code> example is re-written for each pattern so that the state is not repeated for a second counter.</p>
@@ -203,19 +203,36 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
 
         
           <div id="chapter5" class="chapter">
-            <h2>5 : Using <code>useReducer</code> for complex state</h2>
+            <h2>5 : Using <code>useReducer()</code> for complex state</h2>
   
             <section class="sub">
               <p>
-                Outlines the use of a Redux-like pattern for managing state using the React <code>userReducer()</code> hook.
+                Outlines the use of a Redux-like pattern for managing state using the React <code>userReducer()</code> React Hook instead of <code>this.setState()</code> and <code>this.state</code>.
               </p>
             </section>
 
-            <p>Re-write CountContainer to use a reducer</p>
+            <p>The <code>useState()</code> does a good job managing primitive values (e.g. string, integer, boolean) but when you want to encapsulate several values in state and need to use an Array or Object the <code>useReducer()</code> hook will likely be a better solution.</p>
+
+            <p>In the code example below the counter code, that uses React Hooks, has been re-written to make use <code>useReducer()</code> instead of <code>useState()</code>.</p>
+
+            <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/compassionate-einstein-gd16p?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
+
+            <pre class="line-numbers"><code class="language-js noRun">
+import React, { useReducer } from &#34;react&#34;;&#10;&#10;const reducer = (state, action) =&#62; {&#10;  switch (action.type) {&#10;    case &#34;COUNT&#34;:&#10;      return { count: state.count + action.by };&#10;    case &#34;RESET&#34;:&#10;      return { count: state.count - state.count };&#10;    default:&#10;      throw new Error();&#10;  }&#10;}&#10;&#10;const Counter = () =&#62; {&#10;  const [state, dispatch] = useReducer(reducer, { count: 0 });&#10;&#10;  const handleIncrement = () =&#62; {&#10;    dispatch({ type: &#34;COUNT&#34;, by: 1 });&#10;  };&#10;&#10;  const handleDecrement = () =&#62; {&#10;    dispatch({ type: &#34;COUNT&#34;, by: -1 });&#10;  };&#10;  const reset = () =&#62; {&#10;    dispatch({ type: &#34;RESET&#34; });&#10;  };&#10;&#10;  return (&#10;    &#60;section className=&#34;Counter&#34;&#62;&#10;      &#60;h1&#62;Count: {state.count}&#60;/h1&#62;&#10;      &#60;button onClick={handleIncrement} className=&#34;full-width&#34;&#62;&#10;        Increment&#10;      &#60;/button&#62;&#10;      &#60;button onClick={handleDecrement} className=&#34;full-width&#34;&#62;&#10;        Decrement&#10;      &#60;/button&#62;&#10;      &#60;button onClick={reset} className=&#34;full-width&#34;&#62;&#10;        Reset&#10;      &#60;/button&#62;&#10;    &#60;/section&#62;&#10;  );&#10;};&#10;&#10;export default Counter;          
+        </pre></code>
+        <div class="notes">
+
+            <p>
+                <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+                <li><a href="https://www.robinwieruch.de/react-usereducer-vs-usestate">useReducer vs useState in React</a> is a great article on the topic of userReducer v.s. useState question.</li>
+            </ol>
+        </div>
             </div>
 
         <div id="chapter6" class="chapter">
-          <h2>6 : Dealing with Computed/Derived values when using local component state</h2>
+          <h2>6 : Dealing with computed/derived values when using local component state</h2>
 
           <section class="sub">
             <p>
@@ -239,13 +256,42 @@ const Counter = () =&#62; {&#10;  const [firstName, setFirstName] = useState(&#3
         </div>
 
 
+        <div id="chapter7" class="chapter">
+            <h2>7 : Do I need Redux or Mobx, or something like it?</h2>
+  
+            <section class="sub">
+              <p>
+This section briefly outlines why someone would choose to manage state externally from the component tree.
+              </p>
+            </section>
 
-          <div id="chapter7" class="chapter">
+            <p>You might wonder if what React offers alone is now enough to avoid external state managers like Redux or Mobx. So you might need Redux or Mobx if:</p>
+
+            <ul>
+              <li>You want your state to live outside of the component tree in a store(s) and in a sense be in one location. Which, could mean you could keep the state for the entire application in a single JavaScript object (Making reproducing the entire state of the app easy. Imagine what that could be for testing)</li>
+              <li>You want a single API to wrap the entire store(s) function (<code>useReducer()</code> currently creates a unique dispatch function each time).</li>
+              <li>You simply need a more robust management system (including middleware) for a large complex application that is touch by a lot of developers.</li>
+            </ul>
+
+            <div class="notes">
+
+                <p>
+                    <strong>Keep In Mind:</strong>
+                </p>
+                <ol>
+                    <li><a href="https://www.robinwieruch.de/redux-vs-usereducer">React's useReducer vs Redux</a> is a great article on the topic of userReducer v.s. Redux question.</li>
+                </ol>
+            </div>
+          </div>
+
+
+
+          <div id="chapter8" class="chapter">
               <h2>References</h2>
     
               <section class="sub">
                 <p>
-                  These external resources have been either directly or indirectly used in the creation of these notes.
+                  These external resources have been used in the creation of these notes.
                 </p>
               </section>
   <ul>
