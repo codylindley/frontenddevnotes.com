@@ -65,10 +65,10 @@
 
           <p>
             Specifically, in the context of webpages and web applications that
-            run in a web browser client-side state (aka local state) is the data or variables that
-            affects the content and form of a webpage or web application, in any
-            way, during the lifetime of running it in a web browser. Let's
-            unpack this a bit.
+            run in a web browser client-side state (aka local state) is the data
+            or variables that affects the content and form of a webpage or web
+            application, in any way, during the lifetime of running it in a web
+            browser. Let's unpack this a bit.
           </p>
 
           <p>
@@ -76,11 +76,11 @@
             hidden content, just viewable images and text. The web page was
             basically a static and stateless thing. You enter a url to a static
             stateless web page and what you get is a thing that does not change
-            after loading (except for editions). This is not unlike a written page in a book. You buy
-            a physical book, you open it, and the content before you won't 
-            change. Open the book the next day and most likely the book and the
-            content in the book is changeless. The book, by design, is in a
-            single state and won't ever change.
+            after loading (except for editions). This is not unlike a written
+            page in a book. You buy a physical book, you open it, and the
+            content before you won't change. Open the book the next day and most
+            likely the book and the content in the book is changeless. The book,
+            by design, is in a single state and won't ever change.
           </p>
 
           <p>
@@ -180,12 +180,13 @@
 
           <p>
             If you enter a few characters into an HTML input on a web page you
-            have change the state of the input. In fact, even focusing the input
-            changes the state of the inputs UI from unfocused to focused. What
-            happens then if the user moves to a different part of the website or
-            application and then returns to the same UI. If the input is
-            unfocused and the characters are gone, then this is typically
-            consider non-lasting state.
+            have change the state of the input. The input was empty and then you
+            changed it by adding text characters to the input. The state of the
+            input changed. Even the mere focusing of the input changes the state
+            of the inputs UI from unfocused to focused. If an input is unfocused
+            and the characters are gone, then this is typically consider
+            non-lasting state. The state changes by design, are meant to be lost
+            after a period of time.
           </p>
 
           <h3>2.1 : Short-lasting state (aka session state)</h3>
@@ -195,7 +196,11 @@
             really fall into the category of non-lasting state. Short-lasting
             state is the type of state that the developer of a system purposely
             keeps track of for a short period of time with a known expiration
-            (e.g. keeping track of UI changes, e.g. currently select tab but resets to first tab once the user logs out and then logs back in).
+            For example, you logged into your banking website site and we are
+            going to keep you logged for X number of minutes or until you close
+            the browser session, then the state of being logged in for that
+            session is lost, but it is designed to be held for a known period of
+            time.
           </p>
 
           <h3>
@@ -213,7 +218,10 @@
             simple as the last view/location of the UI a user was using or a set
             of data like drafts from a checking account. Basically, if you have
             logic, to save state for an indefinite amount of time, until that
-            data is removed, it is likely long lasting state.
+            data is removed, it is likely long lasting state. Many think of long
+            lasting state as back-end data but the client can also store long
+            lasting data (i.e. an indefinite cookies,
+            <code>localStorage</code> etc...)
           </p>
         </div>
 
@@ -226,7 +234,7 @@
           <section class="sub">
             <p>
               The nature of state in terms of time and storage is only one facet
-              of state as discussed in the previous chapter. However, another
+              of state as discussed in the previous notes. However, another
               facet of state or way to organize it, is defining who needs access
               to it and for how long. Often, developers will divide state into
               Global state and Relative state. These catagories can be helpful
@@ -272,11 +280,12 @@
           <p>
             Global state is typically stored either in global state "Stores"
             external to component trees or at the very top of a component tree.
-            Once an application requires a large quantity of global state used
-            by many different component at many different locations in the
-            component tree developers will often start to use a third party
-            state manager like Redux or Mobx to avoid prop drilling and boiler
-            plated create from the avoiding of prop drilling (i.e. The React context api).
+            Once an application requires a significant amount of global state,
+            used by many different components at many different locations in the
+            component tree, developers will often start to use a third party
+            state manager like Redux or Mobx. Often this is done to avoid prop
+            drilling and boiler plated create from the avoiding of prop drilling
+            (i.e. The React context api).
           </p>
 
           <h3>3.2 : Relative State (aka local state or component state)</h3>
@@ -318,9 +327,9 @@
             state stores. Others think only in terms of relative state. Many
             developers advocate and will use both, based on the nature of the
             state being either global or relative (i.e. when relative state
-            reaches the very top of the tree, and becomes global, some developers
-            will manage it externally from components with something like Redux,
-            Flux, or Mobx).
+            reaches the very top of the tree, and becomes global, some
+            developers will manage it externally from components with something
+            like Redux, Flux, or Mobx).
           </p>
         </div>
 
@@ -339,35 +348,23 @@
           </section>
 
           <p>
-            Fundamentally both third-party state managers and component state
-            solve similar problems, but they both have drawbacks based on the
-            size of your component tree. One could use only a state manager, but
-            then relative state may get shoved through its lens. One could only
-            use component state but then global state may get shoved through its
-            lens. Both of these situations are not ideal.
+            Fundamentally third-party state managers manage state outside of a
+            tree of components inside of stores while local component state
+            solutions manage state within the tree relative to components. As an
+            example, React has several mechanisms to manage state within a
+            component (e.g.,
+            <code>this.setState()</code>, <code>this.state</code>,
+            <code>useState()</code>, <code>useReducer()</code>) while Redux
+            moves state and it's management to an object external from the
+            components (Actions, Action Creators, Dispatcher, Reducers etc..).
           </p>
 
           <p>
-            State managers solve global state issues really well and side step
-            prop drilling while adding boilerplate and complexity (e.g. action,
-            action creator, dispatcher, reducer, store). Doing relative state
-            choirs with state managers can make a really big mess.
-          </p>
-          <p>
-            Component state solves relative state issues really well but suffers
-            from prop drilling issues as state is lifted, which results in the
-            use of additional patterns/API's to fix prop drilling issues
-            (context api), which result in boilerplate and complexity. Doing
-            global state choirs with component state can make a really big mess
-            as well.
-          </p>
-
-          <p>
-            The correct answer for a large complex application is likely a
-            combination of the two types of state used wisely and accompanied by
-            a concrete implementation standard so messes are minimized and
-            implementation can be maintained and scaled over time. (i.e. strick,
-            organized, and maintained conventions of use).
+            Many developers use a combination of both because shoving global
+            state or relative state through a single state solution can lead to
+            maintenance nightmares (e.g. Redux boiler boiler plate to support
+            short-lasting UI state or layers of complex smart/container
+            components at the top of the component tree).
           </p>
         </div>
 
@@ -389,7 +386,7 @@
             store in very specific way so that any component/view using the
             state from a store always gets the most recent state. Some store
             managers think of state as a single store (e.g. Redux) that holds
-            all state (i.e. a massive state tree) while others think of state
+            all state (i.e. a single state tree) while others think of state
             existing in several different stores (i.e. Flux).
           </p>
         </div>
