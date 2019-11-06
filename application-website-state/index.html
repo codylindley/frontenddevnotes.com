@@ -324,12 +324,9 @@
           <p>
             The line between global state and relative state can be a very
             subjective practice. Some think about state only in terms of global
-            state stores. Others think only in terms of relative state. Many
+            state stores (e.g., Redux, Flux, or Mobx). Others think only in terms of relative state (i.e. when its relative to all components it is simply global). Many
             developers advocate and will use both, based on the nature of the
-            state being either global or relative (i.e. when relative state
-            reaches the very top of the tree, and becomes global, some
-            developers will manage it externally from components with something
-            like Redux, Flux, or Mobx).
+            state being either global or relative.
           </p>
         </div>
 
@@ -350,7 +347,7 @@
           <p>
             Fundamentally third-party state managers manage state outside of a
             tree of components inside of stores while local component state
-            solutions manage state within the tree relative to components. As an
+            solutions manage state within the component tree relative to components. As an
             example, React has several mechanisms to manage state within a
             component (e.g.,
             <code>this.setState()</code>, <code>this.state</code>,
@@ -398,22 +395,22 @@
             <p>
               State should only be made up of the bare minimum things that
               change over time excluding things that can be derived or computed
-              from minimal state seeds.
+              from minimal state seeds. Thus, anything that can be derived should be derived avoiding unnecessary state.
             </p>
           </section>
 
           <p>
-            A derived value is a value that is a result of other parts of state.
+            A derived value is a value that is a result or deducted from actual state.
             For example the first name (e.g. "Pat") and last name (e.g.
             "Jenson") of a user might be actual state, but the full name (e.g.
-            "Pat Jenson") is a derivation of two pieces of state. The full name
+            "Pat Jenson") is a derivation of two pieces of state added together. The full name
             itself is not state it is a derivation of state.
           </p>
 
           <p>
             Another example might the total number of completed todos in a todo
             application. This number is computed from the list of todos not
-            stored as state itself.
+            stored as state itself. 
           </p>
 
           <p>

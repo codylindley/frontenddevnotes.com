@@ -75,7 +75,7 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
           </p>
           <ol>
               <li>The purpose of component/local state within a component is so that React can re-run what a component renders, even child components, when the state changes. For example, if the count of a counter changes from  X number to Y number, then the UI has to be re-render (i.e., the counter component re-renders itself by re-running the render function obtaining a new value for <code>count</code>).</li>
-              <li>Non-class components using React hooks are not a complete replacement for class component state.</li>
+              
  
           </ol>
       </div>
@@ -170,8 +170,8 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
 
           <ul>
             <li>Higher Order Components (shown for historical purposes, many avoid this pattern today)</li>
-            <li>Rendered Props (shown for historical purposes, may avoid this pattern today)</li>
-            <li>Custom Hooks (Most devs custom hook patterns today)</li>
+            <li>Rendered Props (Popular still but, many avoid this pattern today in favor of React Hooks)</li>
+            <li>Custom Hooks (Man devs use custom hook patterns today)</li>
           </ul>
 
           <p>Below the <code>CounterContainer</code> example is re-written for each pattern so that the state is not repeated for a second counter.</p>
