@@ -86,16 +86,16 @@
 
           <ul>
             <li><strong>View(s)</strong> - i.e. React components</li>
-            <li><strong>Action(s)</strong> - a labeled set of new values</li>
+            <li><strong>Action(s)</strong> - a labeled set of new values (labeled = action type and new values = payload)</li>
             <li>
               <strong>Dispatcher</strong> - a gate way that notifies all stores of a specific
-              state update (Flux provides a <code>dispatcher.js</code> to be used in your
+              state update (Flux provides <code>dispatcher.js</code> to be used in your
               applications).
             </li>
             <li>
               <strong>Store(s)</strong> - a store is just an object that stores state, operates on state through
               dispatcher registered action handlers (i.e. methods), and can broadcast state
-              updates to views via a pub/sub event system (i.e. React Components).
+              updates to views via a pub/sub event system.
             </li>
           </ul>
 
@@ -110,8 +110,7 @@
             system that connects a view to the store and store to a view. The pub/sub system is used
             by the view to subscribe to a store(s) events and the store uses the
             event system to publish finished events to the view (e.g. a todo was added to the store notify all listeners the store changed). Flux does not offer the pub/sub system they
-            recommend using the one that comes with Node.js called
-            <a href="https://nodejs.org/api/events.html">EventEmitter</a>.
+            recommend using the <a href="https://nodejs.org/api/events.html">EventEmitter</a> system that comes with Node.js.
           </p>
 
           <p>
@@ -130,7 +129,7 @@
         </div>
 
         <div id="chapter3" class="chapter">
-          <h2>3 : A todo app using Flux</h2>
+          <h2>3 : Exposing the Flux pattern through a todo app</h2>
 
           <section class="sub">
             <p>
@@ -140,10 +139,10 @@
 
           <h3>3.1 -  Views</h3>
 
-          <p><code>Todos.js</code></p>
+          <p><code>TodosApp.js</code></p>
 
 <pre class="line-numbers"><code class="language-js noRun">
-import React from &#34;react&#34;;&#10;&#10;import Todo from &#34;../components/Todo&#34;;&#10;import NewTodo from &#34;../components/NewTodo&#34;;&#10;import TodoStore from &#34;../stores/todoStore&#34;;&#10;&#10;export default class Todos extends React.Component {&#10;  state = {&#10;    todos: TodoStore.getAllTodos() // get current values from a store (i.e. the state)&#10;  };&#10;&#10;  componentDidMount() {&#10;    // use pub/sub system to connect store changes to this component&#10;    // only possible because store is inherits from EventEmitter&#10;    // (i.e. store is wrapped with pub/sub system)&#10;    TodoStore.on(&#34;change&#34;, this.getCurrentTodosThenSetState); // when store emits change event, call getCurrentTodosThenSetState()&#10;  }&#10;&#10;  componentWillUnmount() {&#10;    // don&#39;t leave event handler around when component is gone&#10;    TodoStore.removeListener(&#34;change&#34;, this.getCurrentTodosThenSetState);&#10;  }&#10;&#10;  getCurrentTodosThenSetState = () =&#62; {&#10;    // when the store changes call this function&#10;    this.setState((state, prop) =&#62; {&#10;      // start normal React state updates&#10;      return { todos: TodoStore.getAllTodos() }; // get current values from a store (i.e. the state)&#10;    });&#10;  };&#10;&#10;  render() {&#10;    const { todos } = this.state;&#10;&#10;    return (&#10;      &#60;div&#62;&#10;        &#60;h5&#62;Todos:&#60;/h5&#62;&#10;        &#60;hr /&#62;&#10;        &#60;ul&#62;&#10;          {todos.length === 0&#10;            ? &#34;nada to do!&#34;&#10;            : todos.map(todo =&#62; {&#10;                return &#60;Todo key={todo.id} {...todo} /&#62;;&#10;              })}&#10;        &#60;/ul&#62;&#10;        &#60;hr /&#62;&#10;        &#60;NewTodo /&#62;&#10;      &#60;/div&#62;&#10;    );&#10;  }&#10;}
+import React from &#34;react&#34;;&#10;&#10;import Todo from &#34;../components/Todo&#34;;&#10;import NewTodo from &#34;../components/NewTodo&#34;;&#10;import TodoStore from &#34;../stores/todoStore&#34;;&#10;&#10;export default class TodosApp extends React.Component {&#10;  state = {&#10;    todos: TodoStore.getAllTodos() // get current values from a store (i.e. the state)&#10;  };&#10;&#10;  componentDidMount() {&#10;    // use pub/sub system to connect store changes to this component&#10;    // only possible because store is inherits from EventEmitter&#10;    // (i.e. store is wrapped with pub/sub system)&#10;    TodoStore.on(&#34;change&#34;, this.getCurrentTodosThenSetState);&#10;    // when store emits change event, call getCurrentTodosThenSetState()&#10;  }&#10;&#10;  componentWillUnmount() {&#10;    // don&#39;t leave event handler around when component is gone&#10;    TodoStore.removeListener(&#34;change&#34;, this.getCurrentTodosThenSetState);&#10;  }&#10;  &#10;  // when the store changes call this function&#10;  getCurrentTodosThenSetState = () =&#62; {&#10;    this.setState({ todos: TodoStore.getAllTodos() });&#10;  };&#10;&#10;  render() {&#10;    const { todos } = this.state;&#10;&#10;    return (&#10;      &#60;div&#62;&#10;        &#60;h5&#62;Todos:&#60;/h5&#62;&#10;        &#60;hr /&#62;&#10;        &#60;ul&#62;&#10;          {todos.length === 0&#10;            ? &#34;nada to do!&#34;&#10;            : todos.map(todo =&#62; {&#10;                return &#60;Todo key={todo.id} {...todo} /&#62;;&#10;              })}&#10;        &#60;/ul&#62;&#10;        &#60;hr /&#62;&#10;        &#60;NewTodo /&#62;&#10;      &#60;/div&#62;&#10;    );&#10;  }&#10;}
 </pre></code>
 
           <p><code>NewTodo.js</code></p>
@@ -174,7 +173,7 @@ import dispatcher from &#34;../dispatcher&#34;;&#10;&#10;export function createT
           <p><code>todoStore.js</code></p>
 
           <pre class="line-numbers"><code class="language-js noRun">
-import { EventEmitter } from &#34;events&#34;;&#10;&#10;import dispatcher from &#34;../dispatcher&#34;;&#10;&#10;class TodoStore extends EventEmitter {&#10;  constructor() {&#10;    super();&#10;&#10;    // state&#10;    this.todos = [{ id: Date.now(), text: &#34;Eat Lunch&#34; }];&#10;&#10;    // register handlers with dispatcher so calling .dispatch()&#10;    // will result in a store knowing which method to call based&#10;    // based on action constant&#10;    dispatcher.register(action =&#62; {&#10;      switch (action.type) {&#10;        case &#34;CREATE_TODO&#34;: {&#10;          this.createTodo(action.payload);&#10;          break;&#10;        }&#10;        case &#34;DELETE_TODO&#34;: {&#10;          this.deleteTodo(action.payload);&#10;          break;&#10;        }&#10;        default:&#10;      }&#10;    });&#10;  }&#10;&#10;  // methods that operate on store, then emits change event to subscribers:&#10;&#10;  createTodo(todoText) {&#10;    const id = Date.now();&#10;&#10;    this.todos = [&#10;      ...this.todos,&#10;      {&#10;        id,&#10;        text: todoText&#10;      }&#10;    ];&#10;&#10;    this.emit(&#34;change&#34;);&#10;  }&#10;&#10;  deleteTodo(todoId) {&#10;    this.todos = this.todos.filter(todo =&#62; todo.id !== todoId);&#10;    this.emit(&#34;change&#34;);&#10;  }&#10;&#10;  // interface to get current state of the store&#10;&#10;  getAllTodos() {&#10;    return this.todos;&#10;  }&#10;}&#10;&#10;export default new TodoStore();
+import { EventEmitter } from &#34;events&#34;;&#10;&#10;import dispatcher from &#34;../dispatcher&#34;;&#10;&#10;class TodoStore extends EventEmitter {&#10;  constructor() {&#10;    super();&#10;&#10;    // state&#10;    this.todos = [{ id: Date.now(), text: &#34;Eat Lunch&#34; }];&#10;&#10;    // register handlers with dispatcher so calling .dispatch()&#10;    // will result in a store knowing which method to call based&#10;    // based on action type&#10;    dispatcher.register(action =&#62; {&#10;      switch (action.type) {&#10;        case &#34;CREATE_TODO&#34;: {&#10;          this.createTodo(action.payload);&#10;          break;&#10;        }&#10;        case &#34;DELETE_TODO&#34;: {&#10;          this.deleteTodo(action.payload);&#10;          break;&#10;        }&#10;        default:&#10;      }&#10;    });&#10;  }&#10;&#10;  // methods that operate on store, then emits change event to subscribers:&#10;&#10;  createTodo(todoText) {&#10;    const id = Date.now();&#10;&#10;    this.todos = [&#10;      ...this.todos,&#10;      {&#10;        id,&#10;        text: todoText&#10;      }&#10;    ];&#10;&#10;    this.emit(&#34;change&#34;);&#10;  }&#10;&#10;  deleteTodo(todoId) {&#10;    this.todos = this.todos.filter(todo =&#62; todo.id !== todoId);&#10;    this.emit(&#34;change&#34;);&#10;  }&#10;&#10;  // interface to get current state of the store&#10;&#10;  getAllTodos() {&#10;    return this.todos;&#10;  }&#10;}&#10;&#10;export default new TodoStore();
 
 </pre></code>
 
@@ -207,6 +206,8 @@ import { EventEmitter } from &#34;events&#34;;&#10;&#10;import dispatcher from &
               >
               from Facebook
             </li>
+            <li><a href="REACT FLUX TUTORIAL #9 - React Flux Introduction & Flux Stores">REACT FLUX TUTORIAL #9 - React Flux Introduction & Flux Stores</a></li>
+            <li><a href="https://facebook.github.io/flux/docs/in-depth-overview">Flux In-Depth Overview</a></li>
           </ul>
         </div>
       </div>
