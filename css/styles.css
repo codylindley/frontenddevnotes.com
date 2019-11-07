@@ -82,6 +82,10 @@ p {
     line-height: 1.7;
 }
 
+img {
+    margin-top: 30px;
+}
+
 iframe {
     margin-top: 30px;
 }
