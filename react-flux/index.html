@@ -54,13 +54,14 @@
             to replace the MVC (model, view, controller) software design pattern
             they had previously used.
           </p>
-          <img src="images/mvc.png" />
           <p>
             Facebook's implementation of the MVC pattern resulted in a tangled
             data flow and unpredictable results when dealing with UI state.
           </p>
+          <img src="images/mvc.png" />
+
           <p>
-            Facebook responded to this predicament with the Flux pattern which
+            Facebook responded to this predicament is the Flux pattern which
             aimed to replace the tangled MVC relationships between a Model and
             View with a new pattern that enforced a "unidirectional data flow".
             This basically just means that state (within stores) flows in one
@@ -86,7 +87,7 @@
 
           <ul>
             <li><strong>View(s)</strong> - i.e. React components</li>
-            <li><strong>Action(s)</strong> - a labeled set of new values (labeled = action type and new values = payload)</li>
+            <li><strong>Action(s)</strong> - a labeled set of new values (labeled = an action type and new values = a payload)</li>
             <li>
               <strong>Dispatcher</strong> - a gate way that notifies all stores of a specific
               state update (Flux provides <code>dispatcher.js</code> to be used in your
@@ -101,7 +102,7 @@
 
           <p>
             The only part you need from Flux to implement the Flux pattern is
-            the dispatcher. The rest of it is just JavaScript boiler plate and
+            the <a href="https://facebook.github.io/flux/docs/dispatcher/">dispatcher</a>. The rest of it is just JavaScript boiler plate and
             an pub/sub event system.
           </p>
 
@@ -109,8 +110,7 @@
             I like to think that the fifth part to Flux is the event
             system that connects a view to the store and store to a view. The pub/sub system is used
             by the view to subscribe to a store(s) events and the store uses the
-            event system to publish finished events to the view (e.g. a todo was added to the store notify all listeners the store changed). Flux does not offer the pub/sub system they
-            recommend using the <a href="https://nodejs.org/api/events.html">EventEmitter</a> system that comes with Node.js.
+            event system to publish finished events to the view (e.g. a todo was added to the store notify all listeners the store changed). Flux does not offer a pub/sub. Any system can be used, but the <a href="https://nodejs.org/api/events.html">EventEmitter</a> system that comes with Node.js is recommended.
           </p>
 
           <p>
