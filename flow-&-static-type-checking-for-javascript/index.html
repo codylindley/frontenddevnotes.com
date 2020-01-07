@@ -54,13 +54,13 @@
             The JavaScript language is made up of data structures like
             <code>Boolean</code>, <code>Null</code>, <code>Undefined</code>,
             <code>String</code>, <code>Object</code>, etc... . When creating a
-            named data structure (e.g. a variable) in JavaScript the language
-            does not require that you define/annotate what type(s) of data
-            structure will be reference/stored. In JavaScript you can create a
-            parameter, variable, or object property and assign it any data
-            structure you want and then re-assign it with a new data structure
-            type in the future without an error resulting from the change in
-            data structure.
+            named data structure (e.g. a variable, a function parameter, an
+            object property) in JavaScript the language does not require that
+            you define/annotate what type(s) of data structure will be
+            reference/stored. In JavaScript you can create a parameter,
+            variable, or object property and assign it any data structure you
+            want and then re-assign it with a new data structure type in the
+            future without an error resulting from the change in data structure.
           </p>
 
           <pre class="line-numbers"><code class="language-js noRun">
@@ -99,9 +99,19 @@ console.log(typeof myVariable) // logs "Object"
             <ol>
               <li>
                 Dynamically typed languages stand in opposition to statically
-                typed languages because static programming language typically
-                involve a complication step that fails if type invariants occur
-                (i.e. a type is change or used incorrectly).
+                typed languages because static programming languages typically
+                involve a compiliation step that fails if type invariants occur
+                (i.e. a type changes or is used incorrectly).
+              </li>
+              <li>
+                JavaScript is weakly typed in the sense that it will do implicit
+                (i.e. hidden) value conversions (i.e. coercive) at runtime
+                trying to avoid errors using a complex set of rules for
+                conversions (e.g.
+                <code>'3' * '2' === 6 // no error due to coercion</code>). As
+                languages do less and less conversions/coercion they become more
+                strongly typed but yet can still be dynamically typed languages
+                (e.g. Ruby, Python, Lua, PHP etc...)
               </li>
             </ol>
           </div>
@@ -123,8 +133,8 @@ console.log(typeof myVariable) // logs "Object"
             all values have a type, inferred or explicitly defined, and that
             that type does not change and is used correctly at all times). Thus,
             a type checking system like Flow layers itself over the top of
-            JavaScript introducing a complication step where it attempts to
-            treat JavaScript as a static programming language.
+            JavaScript introducing a compilation step where it attempts to treat
+            JavaScript as a static programming language.
           </p>
           <div class="notes">
             <p>
@@ -255,14 +265,11 @@ References:
 
           <p>
             Flow is an open source JavaScript library written by Facebook that
-            statically analysis your JavaScript files verifying almost all data
-            structures (i.e. all values) have a type that does not change over
-            time. It does this by inferring types from expression (e.g.
-            <code>'2' * '2'</code> uses the wrong data type while
-            <code>2 * 2</code> uses the correct given you can't multiply
-            strings) and from the developer annotating JavaScript values with
-            type declarations (e.g. <code>let score: number</code>, score can
-            only be a number data type).
+            statically analysis your JavaScript files as if it was a static
+            language. It does this by inferring types and from the developer
+            annotating JavaScript values with type declarations (e.g.
+            <code>let score: number</code>, score can only be assigned values
+            that are JavaScript numbers).
           </p>
 
           <p>
@@ -348,7 +355,7 @@ References:
           <ul>
             <li>
               In a lot of cases adding annotations to modules can double the
-              size of a module making them unnecessarily complex to read or
+              line size of a module making them unnecessarily complex to read or
               change.
             </li>
             <li>
@@ -374,19 +381,18 @@ References:
               result in hiring and development difficulties.
             </li>
             <li>
-              Your JavaScript source code is not valid JavaScript (Yeah,
+              Your JavaScript source code is not valid JavaScript (
               <a href="https://flow.org/en/docs/types/comments/"
                 >flow comment syntax is available</a
               >
               but not really used in practice).
             </li>
             <li>
-              Flow fails at simplistically and with little effort at turning
-              JavaScript into something it is not by design. A statically typed
-              language. The outcome for large complex code bases, after a couple
-              of years in the wild, seems to be use a language where it is built
-              in (i.e. Reason, Elm, PureScript) because the overhead is not
-              worth the return.
+              Flow fails at simplistically, and with little effort, at turning
+              JavaScript into a statically typed language. The outcome for large
+              complex code bases, after a couple of years in the wild, seems to
+              be use a language where it is built in (i.e. Reason, Elm,
+              PureScript) because the overhead is not worth the return.
             </li>
             <li>
               Flow is significantly a more complex type system and junk drawer
@@ -806,9 +812,9 @@ let myClassInstance: TheClass = new TheClass();
           <p><strong>Primitive Types:</strong></p>
 
           <p>
-            A JavaScript value (variables, parameters, Object properties etc...)
-            can be annotated as a primitive value using of the following flow
-            type annotations:
+            A JavaScript value (e.g. variables, parameters, Object properties
+            etc...) can be annotated as a primitive value using of the following
+            flow type annotations:
           </p>
 
           <ul>
@@ -835,9 +841,9 @@ const constantUndefined : void = undefined; // Note void is used for undefined
           <p><strong>Function Types:</strong></p>
 
           <p>
-            A JavaScript value (variables, parameters, Object properties etc...)
-            can be annotated as a function type using one of the following flow
-            type annotations:
+            A JavaScript value (e.g. variables, parameters, Object properties
+            etc...) can be annotated as a function type using one of the
+            following flow type annotations:
           </p>
 
           <ul>
@@ -880,9 +886,9 @@ myFunc(34241312);
           <p><strong>Object Types:</strong></p>
 
           <p>
-            A JavaScript value (variables, parameters, Object properties etc...)
-            can be annotated as an Object type using the following flow type
-            annotations:
+            A JavaScript value (e.g. variables, parameters, Object properties
+            etc...) can be annotated as an Object type using the following flow
+            type annotations:
           </p>
 
           <ul>
@@ -952,9 +958,9 @@ objectToString(arbitraryObject);
           <p><strong>Array Types:</strong></p>
 
           <p>
-            A JavaScript value (variables, parameters, Object properties etc...)
-            can be annotated as an Array type using the following flow type
-            annotations:
+            A JavaScript value (e.g. variables, parameters, Object properties
+            etc...) can be annotated as an Array type using the following flow
+            type annotations:
           </p>
 
           <ul>
