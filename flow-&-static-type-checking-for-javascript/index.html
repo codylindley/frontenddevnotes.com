@@ -1154,21 +1154,111 @@ stringify("foo");
 
           <section class="sub">
             <p>
-              Description
+              This section outlines how to organize and separate Flow types from
+              JavaScript code
             </p>
           </section>
 
-          <h3>5.1 - Type Aliases</h3>
+          <h3>5.2 - Type Aliases</h3>
 
           <p>
-            paragraph
+            Flow annotations do not have to be written inline. It is possible
+            using the Flow <code>type</code> syntax to create an aliase to flow
+            annotations. This makes re-use and separation of concerns possible.
           </p>
-
-          <h3>5.1 - Importing/Exporting Types from Modules</h3>
 
           <p>
-            paragraph
+            For example syntax heavy inline type definitions like this function
+            type (i.e. inline type noise and difficult to read):
           </p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+// @flow
+
+let myFunc : (num : number) =&gt; string = (num) =&gt; {
+  return num.toString();
+};
+
+let myOtherFunc : (num : number) =&gt; string = (num) =&gt; {
+  return num.toString();
+};
+
+myFunc(34241312);
+myOtherFunc(34241312);
+
+</code></pre>
+
+          <p>
+            Can be visually simplified and made re-usable using typed aliases.
+          </p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+// @flow
+
+// myFuncFlowAliase 
+type myFuncFlowAliase = (num : number) =&gt; string;
+
+// this function takes a number and returns a string 
+let myFunc : myFuncFlowAliase = (num) =&gt; {
+  return num.toString();
+};
+
+let myOtherFunc : myFuncFlowAliase = (num) =&gt; {
+  return num.toString();
+};
+
+myFunc(34241312);
+myOtherFunc(34241312);
+    
+    </code></pre>
+
+          <p>
+            Flow Type aliases can be used anywhere a type annotation can be
+            used.
+          </p>
+
+          <div class="notes">
+            <p>
+              <strong>Note:</strong>
+            </p>
+            <ol>
+              <li>
+                In my opinion all types should be aliased, removing as much
+                noise from actual JavaScript as possible. Shared types should be
+                imported into modules and local types should be organized below
+                module imports.
+              </li>
+              <li>
+                In my opinion all aliases should end with the same identifier
+                "FA" or "FlowAliase".
+              </li>
+            </ol>
+          </div>
+
+          <h3>5.2 - Importing/Exporting Type Aliases</h3>
+
+          <p>
+            In Flow, you can export type aliases, interfaces, and classes from
+            one file and import them in another.
+          </p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+
+// @flow
+export default class Foo {};
+export type MyObject = { /* ... */ };
+export interface MyInterface { /* ... */ };
+
+</code></pre>
+
+          <p>Import:</p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+
+// @flow
+import type Foo, {MyObject, MyInterface} from './exports';
+
+</code></pre>
         </div>
 
         <div id="chapter6" class="chapter">
