@@ -171,7 +171,7 @@
 
           <section class="sub">
             <p>
-              Thinking about state in an application based where it is stored
+              Thinking about state in an application based on where it is stored
               and for how long.
             </p>
           </section>
@@ -191,16 +191,16 @@
 
           <h3>2.1 : Short-lasting state (aka session state)</h3>
 
-          <p>
+          <c>
             Short-lasting state typically has a pre-conceived end, but does not
             really fall into the category of non-lasting state. Short-lasting
             state is the type of state that the developer of a system purposely
-            keeps track of for a short period of time with a known expiration
+            keeps track of for a short period of time with a known expiration.
             For example, you logged into your banking website site and we are
             going to keep you logged for X number of minutes or until you close
             the browser session, then the state of being logged in for that
             session is lost, but it is designed to be held for a known period of
-            time.
+            time (e.g. <a href=="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage"><code>sessionStorage</code></a>).
           </p>
 
           <h3>
@@ -208,7 +208,7 @@
             state)
           </h3>
 
-          <p>
+          <a>
             Contrasted to short lasting state long lasting state is typically
             data that is stored indefinitely until it is specifically deleted at
             a unknown time (i.e. anytime). If you enter data into a website or
@@ -220,8 +220,8 @@
             logic, to save state for an indefinite amount of time, until that
             data is removed, it is likely long lasting state. Many think of long
             lasting state as back-end data but the client can also store long
-            lasting data (i.e. an indefinite cookies,
-            <code>localStorage</code> etc...)
+            lasting data (i.e. indefinite cookies,
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"><code>localStorage</code></a> etc...)
           </p>
         </div>
 
@@ -279,12 +279,12 @@
 
           <p>
             Global state is typically stored either in global state "Stores"
-            external to component trees or at the very top of a component tree.
+            external to UI component trees (e.g. React) or at the very top of a UI component tree/branch.
             Once an application requires a significant amount of global state,
             used by many different components at many different locations in the
             component tree, developers will often start to use a third party
             state manager like Redux or Mobx. Often this is done to avoid prop
-            drilling and boiler plated create from the avoiding of prop drilling
+            drilling and boiler plated create from the avoidance of prop drilling
             (i.e. The React context api).
           </p>
 
@@ -294,7 +294,7 @@
             Relative state is called relative state because the state is not
             typically required to be accessible to the entire application and is
             likely relative or local to a part of the application but not all of
-            it all the time. Relative state is typically label as view/UI state,
+            it, all the time. Relative state is typically label as view/UI state,
             but it can include relative state that is non-lasting, short-lived,
             or even long lasting. Relative state is stored in the client as
             close as possible to the part(s) of the app that need it. That is
@@ -340,7 +340,7 @@
           <section class="sub">
             <p>
               What is the different between third-party state managers and
-              component state?
+              local component state?
             </p>
           </section>
 
@@ -359,7 +359,7 @@
           <p>
             Many developers use a combination of both because shoving global
             state or relative state through a single state solution can lead to
-            maintenance nightmares (e.g. Redux boiler boiler plate to support
+            maintenance nightmares (e.g. Redux boilerplate to support
             short-lasting UI state or layers of complex smart/container
             components at the top of the component tree).
           </p>
@@ -384,7 +384,7 @@
             state from a store always gets the most recent state. Some store
             managers think of state as a single store (e.g. Redux) that holds
             all state (i.e. a single state tree) while others think of state
-            existing in several different stores (i.e. Flux).
+            existing in several different stores (e.g. Flux).
           </p>
         </div>
 

@@ -29,7 +29,9 @@
           Notes on Flow & Static Type Checking for JavaScript
         </h1>
 
-        <h3 style="margin-top:0px">For Intermediate JavaScript Developers</h3>
+        <h3 style="margin-top:0px">
+          For Intermediate to Advanced JavaScript Developers
+        </h3>
         <section>
           These notes discuss using the Flow type checker that can be bolted to
           JavaScript forcing it to act like a static programming language during
@@ -43,7 +45,7 @@
 
           <section class="sub">
             <p>
-              This section briefly describe types in the context of JavaScript
+              This section briefly describes types in the context of JavaScript
               and through the lense of Flow.
             </p>
           </section>
@@ -63,6 +65,18 @@
             future without an error resulting from the change in data structure.
           </p>
 
+          <div class="notes">
+            <p>
+              <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+              <li>
+                The changing of data does not error. But, of course using the wrong type of data in the wrong way might cause a runtime error e.g. a string where only a number is expected, <code>"foo".toFixed(); // throws error</code>.
+              </li>
+
+            </ol>
+          </div>
+
           <pre class="line-numbers"><code class="language-js noRun">
 let myVariable = 1;    
 // myVariable now references a value that is a number type data structure
@@ -70,7 +84,7 @@ let myVariable = 1;
 
 console.log(typeof myVariable) // logs "number"
 
-// It dynamically figured out that the structure was a number and of the type number
+// JS dynamically, at runtime, figured out that the structure was a number and of the type number
 
 myVariable = 'string';
 // now, myVariable references a value that is a string type data structure
@@ -83,7 +97,7 @@ myVariable = {};
 console.log(typeof myVariable) // logs "Object"
 
 // The JavaScript runtime figures out data structure types dynamically the developer does 
-// not tell the program what types are required for the program to run
+// not tell the program what types before running the program
 
 </code></pre>
 
@@ -101,7 +115,11 @@ console.log(typeof myVariable) // logs "Object"
                 Dynamically typed languages stand in opposition to statically
                 typed languages because static programming languages typically
                 involve a compiliation step that fails if type invariants occur
-                (i.e. a type changes or is used incorrectly).
+                (i.e. a type changes or is used incorrectly). While dynamically
+                typed languages that are not compiled only show type errors at
+                runtime. And, if it is weakly typed it will to some degree try
+                and avoid errors by doing hidden type conversions to avoid
+                runtime errors.
               </li>
               <li>
                 JavaScript is weakly typed in the sense that it will do implicit
@@ -119,14 +137,6 @@ console.log(typeof myVariable) // logs "Object"
           <h3>1.2 - Making JavaScript Statically Typed (via Flow)</h3>
 
           <p>
-            Some developers believe statically typed languages, which do type
-            checking when compiling and before execution, are superior to
-            dynamically typed languages (i.e. coercion + weak typing). The
-            reason being that type errors can be surfaced before running the
-            code (e.g. with Javascript that would be before the browser
-            executes/runs code).
-          </p>
-          <p>
             One should think of static language features and static type
             checkers (e.g. Flow) as a system in a programming language that
             forces invariants (i.e. invariants means the program fails unless
@@ -136,6 +146,16 @@ console.log(typeof myVariable) // logs "Object"
             JavaScript introducing a compilation step where it attempts to treat
             JavaScript as a static programming language.
           </p>
+
+          <p>
+            Some developers believe that statically typed languages that have a
+            compiling/transpiler step, which do type checking before runtime
+            execution, are superior to dynamically typed languages that have no
+            compiling/transpiler step. The reason being that type errors can be
+            surfaced before running the code (e.g. with Javascript that would be
+            before the browser executes/runs code meaning errors are surfaced before runtime).
+          </p>
+
           <div class="notes">
             <p>
               <strong>Keep In Mind:</strong>
@@ -144,7 +164,7 @@ console.log(typeof myVariable) // logs "Object"
               <li>
                 To layer a type system over the top of JavaScript requires
                 adding a transpiler step to your development workflow to remove
-                the type annotations from the source code. If you are using
+                the type annotations from the source code (i.e. types have to be removed for JavaScript to actually run). If you are using
                 Babel then you have already accept this step and Flow can be
                 used to remove Flow syntax from your source code as it is being
                 built for production by Babel.
@@ -153,11 +173,11 @@ console.log(typeof myVariable) // logs "Object"
           </div>
 
           <p>
-            To understand static types in the context of JavaScript consider
-            that by using Flow one can define/annotate (e.g.
+            To initially grok Flow and static types in the context of JavaScript
+            consider that by using Flow one can define/annotate (e.g.
             <code>:string</code> and <code>:number</code>) what type of value a
             variable or parameter can store/reference. Provide the wrong type of
-            data in the wrong place and Flow will complain.
+            data in the wrong place and Flow will complain/error.
           </p>
 
           <pre class="line-numbers"><code class="language-js noRun">
@@ -202,8 +222,15 @@ References:
           <pre class="line-numbers"><code class="language-js noRun">
 // @flow  
 
+/* Flow is inferring that n in the function below should be a number not a string because it is pulling 
+JavaScript from a weakly typed language to a strongly typed language trying 
+to get it to error when ambiguity is introduced because of weakness in types or 
+native coercion routines/rules. */
+
 function square(n) {
   return n * n; // type error inferred because expression expects numbers not strings
+  // Non-Flow JS would not error here, you'd get 4 
+  // because native JavaScript try and do the correct thing
 }
 
 square("2");
@@ -266,18 +293,19 @@ References:
           <p>
             Flow is an open source JavaScript library written by Facebook that
             statically analysis your JavaScript files as if it was a static
-            language. It does this by inferring types and from the developer
-            annotating JavaScript values with type declarations (e.g.
+            language instead of a dynamic langauge. It does this by inferring types and analysis type
+            annotations written over the top of JavaScript from the developer
+            (e.g.
             <code>let score: number</code>, score can only be assigned values
-            that are JavaScript numbers).
+            that are JavaScript numbers. But this isn't valid JS so the
+            <code>: number</code> has to be removed before a JS engine will
+            run).
           </p>
 
           <p>
             Basically, it is a tool not unlike eslint that statically analyzes
             your code during development for invariant data type problems. It
-            might be best to simply think of it as a custom layer over the top
-            of JavaScript that transforms the language into a statically typed
-            language.
+            might be best to simply think of it as a linting tool that expects JavaScript syntax to conform to a typed system and when id does not, it errors/warns/blocks development, etc... .
           </p>
 
           <h3>2.2 - Do I need Flow?</h3>
@@ -291,10 +319,13 @@ References:
             developers might have the problems that Flow fixes). It is likely
             the case that if you or your team requires the use of
             strict/strongly typed code,
-            <strong>a bolted on type system</strong> will bring more problems
-            than solutions. If types are an absolute requirement for your
-            project consider using a natively type language (e.g. Reason,
-            PureScript, Elm) before settling for Flow.
+            <strong>a bolted on type system</strong> will
+            <a
+              href="https://medium.com/javascript-scene/the-typescript-tax-132ff4cb175b"
+              >bring more problems than solutions</a
+            >. If types are an absolute requirement for your project consider
+            using a natively type language (e.g. Reason, PureScript, Elm) before
+            settling for Flow or TypeScript.
           </p>
 
           <div class="notes">
@@ -303,49 +334,52 @@ References:
             </p>
             <ol>
               <li>
-                TypeScript is basically Flow + Babel in terms of static v.s.
-                dynamically typed features. So IMO Flow + Babel are not
-                different from TypeScript. Both at the end of the day bolt on a
-                new non-native language feature (i.e. a type system).
+                TypeScript, an alternative to Flow, is basically Flow + Babel in terms of static v.s.
+                dynamically typed features. So Flow + Babel are not
+                different from TypeScript in the context of type systems. Both at the end of the day bolt on a
+                new non-native language features (i.e. a type system plus more
+                e.g. Flow linting and much more in the case of TypeScript).
               </li>
             </ol>
           </div>
 
           <p>
-            With that said, many individuals and teams find Flow extremely
+            With that said, many individuals and teams find Flow (i.e. bolted on type systems) extremely
             helpful. But this is more telling of the individual or team and the
-            problems and pains they wish to have and not exactly based on the
-            objective merits of Flow itself. Flows value is in the eye of the
+            problems and tradeoffs they wish to have and not exactly based on the
+            objective merits of Flow (i.e. bolted on type systems) itself. Flows value is in the eye of the
             beholder. If you are trying to figure out if Flow should be used on
             a team, first asked if everyone on the teams agrees Flow is
-            absolutely required. Be concerned about co-workers who take a
-            neutral, naive, or negative perspective on Flow because the effort
-            to make it valuable takes 100% commitment from everyone who writes
-            code where Flow is used. Flow usage is the kind of choice that
-            requires 100% participation from all team members for its value to
-            rise above its costs. If the team can't reach 100% agreement on the
-            usage of Flow then Flow should likely be avoided because the
-            subjective/contextual value is directly tied to a 100% committed to
-            the quality of its implementation (i.e. 1% to 99% Flow is worse than
-            0% Flow. Going all in is the only way to think about Flow as the
-            goal should be 100% Flow coverage. If you can't reach that when
-            implementing it be leery of the costs of attempting anything shy of
-            100%. Especially if you already have a large complex code base).
+            absolutely required given its costs. Be concerned about co-workers
+            who take a neutral, naive, or negative perspective on Flow because
+            the effort to make it valuable takes 100% commitment from everyone
+            who writes code where Flow is used. Flow usage is the kind of choice
+            that requires 100% participation/buy-in from all team members for its value
+            to rise above its costs. If the team can't reach a massive majority
+            agreement on the usage of Flow then Flow should likely be avoided
+            because the subjective/contextual value is directly tied to the
+            commitment level and to the quality of its implementation.
           </p>
 
           <div class="notes">
             <p>
-              <strong>Note:</strong>
+              <strong>Keep in Mind:</strong>
             </p>
             <ol>
               <li>
-                Don't be tempted by the notion of the gradual adoption of Flow
-                into a complex code base. If Flow is going to be worth the
-                overhead it is best to start a project using it from the get go
-                with very clear standards around how all values will be typed
-                (even third party modules). Adopting Flow incrementally after
-                that fact can be a very risky proposition (in terms of value and
-                time spent).
+                For Flow to reach a tipping point in value I think it has to be
+                implemented on day one and the implementation has to be
+                normalized, documented, and syntax standards/rules have to be
+                followed consistently across all modules (massive developer
+                buy-in and conformance is needed). If you adapt it after the fact or assume
+                developers will just figure it out in terms of conventions as
+                they go, you'll likely never get the value out of the cost (the syntax variations cause massive indirection in the code). All
+                that you have done is added a massively complex syntax and cruft
+                over the top of complications that already exit that will likely
+                only evolve from one state of incompleteness to the next (i.e.
+                we'll add it incrementally and we'll avoid having stop and fix
+                hard problems today. Nope, those problems don't go away and
+                likely never really get solved).
               </li>
             </ol>
           </div>
@@ -371,7 +405,8 @@ References:
             <li>
               Typing out annotations and appeasing the Flow checker can be a
               massive time suck with little return to developers and overall
-              code quality.
+              code quality (Flow being the cause of removing a lot of important
+              errors is a very debated topic with no clear outcome).
             </li>
             <li>
               JavaScript developers who have never used Flow will experience a
@@ -446,7 +481,25 @@ References:
               The theory is good, however the implementations details wears at
               the theoretical. And the implementation is not simply convention
               alone (i.e. a hammer can be designed poorly regardless of if you
-              use it correctly).
+              use it correctly). The value of unsound bolted on type systems is
+              not a given value. It is actually a fairly debated topic with a
+              long history of ups and downs.
+            </li>
+            <li>
+              Learning Flow to be an expert can take 6 to 8 months (likely less)
+              and this is if the developer views it as worth learning. If the
+              developer views it as an annoyance and a massive time suck with
+              little to no return, learning it might go on indefinitely. Either
+              way, if developers have never seen your code or used Flow you've
+              added an entire sub-language/syntax to be learned before learning
+              about the actual code. And the worse part is this is not an
+              isolated syntax but one that muddies the waters of JavaScript
+              syntax itself. Meaning, if you are use to JavaScript syntax having
+              a bolted on syntax can take a long time to consciously and
+              unconsciously jive with all ones previous mental models of the
+              language. Essentially Flow breaks JavaScript syntax that many of
+              us have spent years building up a specific lense in which to view
+              it and read it.
             </li>
           </ul>
 
@@ -456,23 +509,25 @@ References:
             <li>
               Values (e.g. variables, parameters, object properties, expression
               outcomes, etc...) have a more explicit and obvious type. Which
-              many claim can lead to fewer runtime errors and fewer regressions
+              some claim can lead to fewer runtime errors and fewer regressions
               when refactoring.
             </li>
             <li>Avoid cluttering unit tests with type checking routines.</li>
             <li>
               Avoid writing type related checks in function calls and the
-              corresponding error throwing boilerplate if the type checks fail.
+              corresponding error throwing boilerplate if the type checks fail. Many argue that if you don't have to write a lot of defensive code dealing with types of value you not only simplify your code but make it more preferment. 
             </li>
             <li>
               Possible that some JavaScript type coercion, resulting in runtime
-              errors, can be avoided.
+              errors, can be avoided <code>before runtime</code> (i.e. earlier errors at compile time instead of run time).
             </li>
             <li>
               Some degree of inline documentation for functions and classes is
               provided by using Flow syntax (e.g. what parameter is expect to a
               function, and in what form, and what value should be returned).
             </li>
+            <li>Can hint/info when a refactor is incomplete</li>
+            <li>Improvement to developer experience when using certain IDE's (autocomplete, inline documentation etc...)</li>
           </ul>
         </div>
 
@@ -493,7 +548,7 @@ References:
             files for types in near real time. Most developers have Flow
             integrated into their IDE so that as they work in their code Flow is
             always checking and reporting on Flow errors in real time without
-            having to monitor or use a command line interface.
+            having to monitor or use a command line interface (i.e. using a <a href="https://flow.org/en/docs/config/"><code>.flowconfig</code> file</a>).
           </p>
 
           <p>
@@ -578,28 +633,29 @@ References:
             Flow is just a courtesy so you don't have to type everything, but
             Flow assumes that you are not only using Flow for inferences. Flow's
             value is tied up in using the annotating system it provides to
-            explicitly track values (i.e. by using type annotations one can
-            create logical proofs for all values so that it will be near
-            impossible for type errors to occur).
+            explicitly track values (i.e. by using type annotations one can in a sense
+            create logical proofs/formals for all values so that it will be near
+            impossible for type errors to occur at runtime).
           </p>
 
           <h3>3.3 - What is a Flow Type Annotation?</h3>
 
           <p>
-            Flow essentially provides a syntax, pretty much an evolution of the
-            JavaScript language, that it unfortunately calls "Types" (This can
-            get confusing because it does not correlate exactly to native types
-            in JavaScript). Flow type syntax/annotations are added to your
-            JavaScript, which is used by Flow to lint/analysis your code in the
-            context of a static type system (i.e. flow annotations layer over
-            the top of JavaScript a custom sub-language syntax that is used by
-            the Flow type checking system).
+            Flow provides a syntax, pretty much an evolution of the JavaScript
+            language, that it unfortunately calls "Types" (This can get
+            confusing because it does not correlate exactly to native types in
+            JavaScript). Flow type syntax/annotations are added to your
+            JavaScript, which is used by Flow to statically lint/analysis your
+            code in the context of a static type system (i.e. flow annotations
+            layer over the top of JavaScript a custom sub-language syntax that
+            is used by the Flow type checking system to analysis your JavaScript
+            as if it were a statically typed language and strongly typed. This is not at all different from something like eslint that analysis your JS and tells you stuff about the code written).
           </p>
 
           <p>
             Flow offers the following type annotations (i.e. really an entire
-            type syntax, including tools and utilities, for statically typing
-            values in JavaScript):
+            type syntax, including tools and utilities, for annotating values in
+            JavaScript):
           </p>
 
           <p>
@@ -636,7 +692,7 @@ References:
           <pre class="line-numbers"><code class="language-js noRun">
 // @flow  
 
-const myFunc = (x) => {
+const myFunc = (x) =&gt; {
   return x;
 }
 
@@ -647,10 +703,16 @@ myFunc(1,2);
 5: myFunc(1,2);
             ^ Cannot call `myFunc` because no more than 1 argument is expected by function [1].
 References:
-1: const myFunc = (x) => {                  ^ [1]
+1: const myFunc = (x) =&gt; {                  ^ [1]
 
 */
 </code></pre>
+
+          <p>
+            These types of errors slightly extend Flow past a type checking
+            system and into the realm of JavaScript conventions/linting
+            restrictions.
+          </p>
 
           <h3>3.5 - What can be Annotated?</h3>
 
@@ -659,8 +721,7 @@ References:
             new to Flow or static types this might not help you grok exactly how
             JavaScript is annotated with Flow types. It might initially be
             helpful to think about what can be annotated (or inferred) in terms
-            of the following simplistic expressions that result in JavaScript
-            values:
+            of:
           </p>
 
           <p>
@@ -676,8 +737,9 @@ References:
           <p>
             Below each of the above typing situations are simplistically and
             briefly explored in order to initially reveal some insight into what
-            can be typed (Most of the examples use very simple Flow type
-            annotations e.g. primitive types):
+            can be typed (most of the examples use very simple Flow type
+            annotations e.g. primitive types <code>:string</code> and
+            <code>:number</code>):
           </p>
 
           <p><strong>Variable's:</strong></p>
@@ -779,7 +841,9 @@ let myClassInstance: TheClass = new TheClass();
               <li>
                 Anything you don't annotate will get inferred by Flow (i.e. Flow
                 will deduct what the type is based on how it is used or what
-                data structures get assigned).
+                data structures get assigned). Unless you pull the escape hatch
+                and tell flow to act like regular JS with the
+                <code>:any</code> annotation.
               </li>
             </ol>
           </div>
@@ -790,7 +854,9 @@ let myClassInstance: TheClass = new TheClass();
 
           <section class="sub">
             <p>
-              This section outlines the basic Flow type annotation syntax.
+              This section outlines basic Flow type annotation syntax. Primitive
+              Types, Function Types, Object Types, Array Types, Class Types,
+              Literal Types, Maybe Types, Any Type, Mixed Type.
             </p>
           </section>
 
@@ -812,7 +878,7 @@ let myClassInstance: TheClass = new TheClass();
           <p><strong>Primitive Types:</strong></p>
 
           <p>
-            A JavaScript value (e.g. variables, parameters, Object properties
+            A JavaScript value (e.g. variables, parameters, values returned from functions, Object properties, Array items
             etc...) can be annotated as a primitive value using of the following
             flow type annotations:
           </p>
@@ -823,7 +889,7 @@ let myClassInstance: TheClass = new TheClass();
             <li><code>: string</code></li>
             <li><code>: null</code></li>
             <li>
-              <code>: void</code> (void is used to mean <code>undefined</code>)
+              <code>: void</code> (<strong>Note:</strong> void is used to mean <code>undefined</code>)
             </li>
           </ul>
 
@@ -841,15 +907,14 @@ const constantUndefined : void = undefined; // Note void is used for undefined
           <p><strong>Function Types:</strong></p>
 
           <p>
-            A JavaScript value (e.g. variables, parameters, Object properties
-            etc...) can be annotated as a function type using one of the
+            A JavaScript function value can be annotated as a function type using one of the
             following flow type annotations:
           </p>
 
           <ul>
             <li><code>: () =&gt; void</code></li>
             <li>
-              <code>: Function</code> (Don't use this, be aware however you
+              <code>: Function</code> (<code>Note:</code> Don't use this, be aware however you
               might see its use. Instead use <code>any</code> or
               <code>(...args: Array&lt;any&gt;) =&gt; any)</code>
             </li>
@@ -886,9 +951,8 @@ myFunc(34241312);
           <p><strong>Object Types:</strong></p>
 
           <p>
-            A JavaScript value (e.g. variables, parameters, Object properties
-            etc...) can be annotated as an Object type using the following flow
-            type annotations:
+            A JavaScript value (e.g. Object properties) can be annotated as an Object type using the following flow
+            type annotations (Note the properties in the Object can be typed too):
           </p>
 
           <ul>
@@ -946,9 +1010,8 @@ objectToString(arbitraryObject);
                 a number value.
               </li>
               <li>
-                An object can have an exact property using the
-                <code>|</code> character. For example,
-                <code>let myObject : {|score?:number|} = {score:120}</code>
+                Using the <code>|</code> character Flow can be informed when an object must contain a specific property. For example,
+                <code>let myObject : {|score:number|} = {score:120}</code>
                 tells Flow that this object must have a score property with a
                 number value.
               </li>
@@ -958,9 +1021,8 @@ objectToString(arbitraryObject);
           <p><strong>Array Types:</strong></p>
 
           <p>
-            A JavaScript value (e.g. variables, parameters, Object properties
-            etc...) can be annotated as an Array type using the following flow
-            type annotations:
+            A JavaScript value can be annotated as an Array type using the following flow
+            type annotations (Note that the items in the Array can be typed too):
           </p>
 
           <ul>
@@ -1052,8 +1114,8 @@ getColor("error");   // Error, can only be "success" | "warning" | "danger"
             Flow offers the <strong>Maybe Type</strong> (e.g.
             <code>let score: ?number</code>) that can be combined with any other
             type to signify that the type is optional and if it does not exist
-            then that is ok (i.e. it is <code>null</code> or
-            <code>undefined</code>).
+            then that is ok (i.e. it is ok that <code>null</code> or
+            <code>undefined</code> was used here).
           </p>
 
           <pre class="line-numbers"><code class="language-js noRun">
@@ -1097,8 +1159,8 @@ add({}, []);   // no flow error.
           <p>
             Flow offers the <strong>Unknown Type</strong> (i.e.
             <code>: mixed</code>) so that any data structure can be provided.
-            However, if the mixed value is used then logic (e.g.
-            <code>if</code> statement) has to exist that will determine its type
+            Note that if you use the mixed type then additional checks (e.g.
+            <code>if</code> statement) have to exist that will determine its type
             or Flow will complain (as opposed to <code>:any</code> which won't
             complain about anything)
           </p>
@@ -1195,21 +1257,22 @@ myOtherFunc(34241312);
 </code></pre>
 
           <p>
-            Can be visually simplified and made re-usable using typed aliases.
+            Can be visually simplified, concerns separated, and made re-usable using typed aliases.
           </p>
 
           <pre class="line-numbers"><code class="language-js noRun">
 // @flow
 
-// myFuncFlowAliase 
-type myFuncFlowAliase = (num : number) =&gt; string;
+// myFuncFlowAlias 
+type myFuncFlowAlias = (num : number) =&gt; string;
 
 // this function takes a number and returns a string 
-let myFunc : myFuncFlowAliase = (num) =&gt; {
+let myFunc : myFuncFlowAlias = (num) =&gt; {
   return num.toString();
 };
 
-let myOtherFunc : myFuncFlowAliase = (num) =&gt; {
+// this function takes a number and returns a string
+let myOtherFunc : myFuncFlowAlias = (num) =&gt; {
   return num.toString();
 };
 
@@ -1229,14 +1292,14 @@ myOtherFunc(34241312);
             </p>
             <ol>
               <li>
-                In my opinion all types should be aliased, removing as much
-                noise from actual JavaScript as possible. Shared types should be
-                imported into modules and local types should be organized below
-                module imports.
+                In my opinion all types should be aliased, removing as much noise from actual
+                JavaScript as possible. Shared types should be imported into
+                modules and local types should be organized below module
+                imports.
               </li>
               <li>
-                In my opinion all aliases should end with the same identifier
-                "FA" or "FlowAliase".
+                All aliases should end with the same identifier "FA" or
+                "FlowAlias".
               </li>
             </ol>
           </div>
@@ -1245,7 +1308,7 @@ myOtherFunc(34241312);
 
           <p>
             In Flow, you can export type aliases, interfaces, and classes from
-            one file and import them in another.
+            one file and import them into another file.
           </p>
 
           <pre class="line-numbers"><code class="language-js noRun">
@@ -1310,6 +1373,12 @@ import type Foo, {MyObject, MyInterface} from './exports';
             <li>
               <a href="https://www.manning.com/books/programming-with-types"
                 >Programming with Types Examples in TypeScript</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://medium.com/javascript-scene/the-typescript-tax-132ff4cb175b"
+                >The TypeScript Tax</a
               >
             </li>
           </ul>
