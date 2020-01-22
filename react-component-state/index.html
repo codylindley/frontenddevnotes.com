@@ -87,7 +87,7 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
 
           <section class="sub">
             <p>
-              These notes discuss taking state and moving it up in a component tree to then pass it from a ancestral component back down to child components.
+              These notes discuss taking state and moving it up in the component tree to then pass it from an ancestral component back down to child components (i.e. lifting state using the React Container/Smart/Controller Component Pattern).
             </p>
           </section>
 
@@ -270,7 +270,7 @@ This section briefly outlines why someone would choose to manage state externall
             <ul>
               <li>You want your state to live outside of the component tree in a store(s) and in a sense be in one location. Which, could mean you could keep the state for the entire application in a single JavaScript object (Making reproducing the entire state of the app easy. Imagine what that could mean for testing)</li>
               <li>You want a single API to wrap the entire store(s) function (<code>useReducer()</code> currently creates a unique dispatch function each time).</li>
-              <li>You simply need a more robust management system (including middleware) for a large complex application that is touch by a lot of developers.</li>
+              <li>You simply need a more robust management system (including middleware) for a large complex application that is being developed by a lot of developers with different skills.</li>
             </ul>
 
           </div>

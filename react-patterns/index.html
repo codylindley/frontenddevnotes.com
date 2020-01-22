@@ -37,22 +37,231 @@
         <hr />
 
         <div id="chapter1" class="chapter">
-          <h2>1 : High-Order Components</h2>
+          <h2>
+            1 : React Container/Smart/Controller Component Pattern
+          </h2>
 
           <section class="sub">
             <p>
-              This will briefly outline what a HOC is and some common uses of
-              the pattern.
+              This section will outline the React Component
+              Container/Smart/Controller Pattern.
             </p>
           </section>
 
-          <h3>1.1 - What is a HOC?</h3>
+          <h3>
+            1.1 - What is the Container/Smart/Controller Component Pattern?
+          </h3>
+
+          <p>
+            You will hear this pattern called container components, smart
+            components, or controller components/views. Basically, when you wrap
+            a component around another presentational/dumb/stateless component
+            and the outer component deals only with setting and getting
+            data/state/store stuff that is then pass down to the
+            presentational/dumb/stateless components via props/context, you are
+            dealing with a container/smart/controller component.
+          </p>
+
+          <h3>1.2 - Example(s)</h3>
+
+          <p>
+            Below are two sudo components contrasting the difference between a
+            container/smart/controller component and
+            presentational/dump/stateless component
+          </p>
+
+          <p>
+            <code>CommentList.js</code>is a presentational/dump/stateless
+            component:
+          </p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+import React from &#34;react&#34;;&#10;&#10;const Commentlist = ({comments}) =&#62; (&#10;  &#60;ul&#62;&#10;    {comments.map(({ body, author }) =&#62;&#10;      &#60;li&#62;{body}-{author}&#60;/li&#62;&#10;    )}&#10;  &#60;/ul&#62;&#10;)
+          </code></pre>
+
+          <p>
+            <code>CommentListContainer.js</code> is a container/smart/controller
+            component:
+          </p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+import React from &quot;react&quot;;&#10;import CommentList from &quot;./CommentList&quot;;&#10;&#10;class CommentListContainer extends React.Component {&#10;  state = { comments: [] }&#10;  &#10;  componentDidMount() {&#10;    fetch(&quot;/my-comments.json&quot;)&#10;      .then(res =&gt; res.json())&#10;      .then(comments =&gt; this.setState({ comments }))&#10;  }&#10;  &#10;  render() {&#10;    return &lt;CommentList comments={this.state.comments} /&gt;;&#10;  }&#10;}
+          </code></pre>
+
+          <p>
+            Below is another example of using the
+            <code>CounterContainer.js</code> container/smart/controller
+            component to separate/lift up state away from UI components (i.e.
+            <code>&lt;Count&gt;</code> and <code>&lt;Button&gt;</code>):
+          </p>
+
+          <iframe
+            src="https://codesandbox.io/embed/staging-bash-tpyxw?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounterContainer.js"
+            title="staging-bash-tpyxw"
+            allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+            style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;"
+            sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+          ></iframe>
+
+          <p>
+            The container/smart/controller &lt;CounterContainer&gt; component
+            manages the state while the dump/stateless &lt;Count&gt; and
+            &lt;Button&gt; components take into the state via props.
+          </p>
+
+          <h3>1.3 - When do I use the pattern?</h3>
+
+          <ul>
+            <li>
+              When you want your presentational/dump/stateless components to be
+              reusable and disconnect/separated from data/state/store concerns.
+            </li>
+            <li>
+              You want to create simple tests for UI components. A
+              presentational/dump/stateless components is dead simple to test as
+              they typically have no state and only take props.
+            </li>
+          </ul>
+        </div>
+
+        <div id="chapter2" class="chapter">
+          <h2>2 : High-Order Components</h2>
+
+          <section class="sub">
+            <p>
+              This section will outline the React High-Order Component Pattern.
+            </p>
+          </section>
+
+          <h3>2.1 - What is the High-Order Components Pattern?</h3>
 
           <p>
             A higher order component is a javascript function that takes a React
-            component as an argument and then returns a different component from
-            that function.
+            component as an argument, wraps the passed component with another
+            component (i.e. a Container/Smart/Controller Component Pattern) and
+            then returns this wrapped component.
           </p>
+
+          <h3>2.2 - Example(s)</h3>
+
+          <p>
+            Image you wanted every component to have the same prop sent to it.
+            You could create a HOC to wrapped every component you create so it
+            always gets exactly the same prop (Note: would work with state too,
+            not just props).
+          </p>
+
+          <p>HOC (<code>withReactNameProp.js</code>):</p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+import React from &quot;react&quot;;&#10;&#10;function withReactNameProp(WrappedComponent) {&#10;  return class extends React.Component {&#10;    render() {&#10;      return &lt;WrappedComponent name=&quot;React&quot; {...this.props} /&gt;;&#10;    }&#10;  };&#10;}&#10;&#10;export default withReactNameProp;
+
+</code></pre>
+
+          <p>Component to be wrapped (<code>Hello.js</code>):</p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+import React from &quot;react&quot;;&#10;import withReactNameProp from &quot;./withReactNameProp&quot;;&#10;&#10;// foo comes from &lt;Hello foo=&quot;bar&quot;&gt;&#10;// the name &quot;React&quot; comes from HOC&#10;const Hello = ({ name, foo }) =&gt; {&#10;  return (&#10;    &lt;&gt;&#10;      {foo} // prints "bar" works because of {...this.props} in HOC&#10;      &lt;h1&gt;Hello {name}!&lt;/h1&gt;&#10;    &lt;/&gt;&#10;  );&#10;};&#10;&#10;export default withReactNameProp(Hello);
+
+</code></pre>
+
+          <p>Using the Wrapped Component (<code>index.js</code>):</p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&quot;;&#10;&#10;import Hello from &quot;./Hello&quot;;&#10;&#10;ReactDOM.render(&lt;Hello foo=&quot;bar&quot; /&gt;, document.getElementById(&quot;root&quot;));
+
+</code></pre>
+
+          <h3>2.3 - When do I use the patten?</h3>
+
+          <p>
+            When you want to re-use the details of component with any number of
+            other components. A common use case is sharing the same state setup
+            with an number of components (e.g. Counter) so each instance will
+            have its own state setup but you only have to define the state setup
+            once.
+          </p>
+        </div>
+
+        <div id="chapter3" class="chapter">
+          <h2>3 : Children Props Pattern</h2>
+
+          <section class="sub">
+            <p>
+              This section will outline the Children Props Pattern.
+            </p>
+          </section>
+
+          <h3>3.1 - What is the Children Props Pattern?</h3>
+
+          <p>
+            The <code>props</code> value passed to React components has a
+            special value on it called <code>props.children</code>. The
+            <code>children</code> value is the child value defined, when the
+            component is used (e.g.<code>
+              &lt;Component&gt; this is the children value here
+              &lt;/Component&gt;</code
+            >). If you think about it the children value can be any type of
+            JavaScript value not just strings, components, or JSX (e.g. could be
+            a function too or really any javascript expression).
+          </p>
+
+          <p>
+            If the <code>props.children</code> value was not available then
+            composition would all have to happen via <code>props</code> alone.
+            So <code>props.children</code> can be used when you need to output
+            the contents of a component to the UI.
+          </p>
+
+          <p></p>
+
+          <h3>3.3 - Example(s)</h3>
+
+          <p>Image you created</p>
+
+          <h3>3.2 - When do I use the patten?</h3>
+
+          <ul>
+            <li>
+              When you don't know what the children will be for a component
+              ahead of time, you can use children to get access to the value
+              when the component is used, not defined (e.g.
+              <code>&lt;Button&gt;button text&lt;/Button&gt;</code>).
+            </li>
+            <li>
+              When you need to output the contents of a component to the UI
+              (e.g.
+              <code
+                >&lt;Modal title=&quot;alert&quot;&gt; &lt;Alert&gt; the site is
+                down &lt;/Alert&gt; &lt;/Modal&gt;</code
+              >).
+            </li>
+          </ul>
+        </div>
+
+        <div id="chapter4" class="chapter">
+          <h2>4 : Render Props</h2>
+
+          <section class="sub">
+            <p>
+              This section will outline the React Render Props Pattern.
+            </p>
+          </section>
+
+          <h3>4.1 - What is the Render Props Pattern?</h3>
+
+          <p>
+            Not unlike the React HOC pattern the Render Props Pattern is used to
+            share
+          </p>
+
+          <h3>4.2 - Example(s)</h3>
+
+          <p></p>
+
+          <h3>4.3 - When do I use the patten?</h3>
+
+          <p></p>
         </div>
       </div>
     </div>
