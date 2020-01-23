@@ -141,38 +141,38 @@
 
           <p><code>TodosApp.js</code></p>
 
-<pre class="line-numbers"><code class="language-js noRun">
+<pre class="line-numbers"><code class="language-jsx noRun">
 import React from &#34;react&#34;;&#10;&#10;import Todo from &#34;../components/Todo&#34;;&#10;import NewTodo from &#34;../components/NewTodo&#34;;&#10;import TodoStore from &#34;../stores/todoStore&#34;;&#10;&#10;export default class TodosApp extends React.Component {&#10;  state = {&#10;    todos: TodoStore.getAllTodos() // get current values from a store (i.e. the state)&#10;  };&#10;&#10;  componentDidMount() {&#10;    // use pub/sub system to connect store changes to this component&#10;    // only possible because store is inherits from EventEmitter&#10;    // (i.e. store is wrapped with pub/sub system)&#10;    TodoStore.on(&#34;change&#34;, this.getCurrentTodosThenSetState);&#10;    // when store emits change event, call getCurrentTodosThenSetState()&#10;  }&#10;&#10;  componentWillUnmount() {&#10;    // don&#39;t leave event handler around when component is gone&#10;    TodoStore.removeListener(&#34;change&#34;, this.getCurrentTodosThenSetState);&#10;  }&#10;  &#10;  // when the store changes call this function&#10;  getCurrentTodosThenSetState = () =&#62; {&#10;    this.setState({ todos: TodoStore.getAllTodos() });&#10;  };&#10;&#10;  render() {&#10;    const { todos } = this.state;&#10;&#10;    return (&#10;      &#60;div&#62;&#10;        &#60;h5&#62;Todos:&#60;/h5&#62;&#10;        &#60;hr /&#62;&#10;        &#60;ul&#62;&#10;          {todos.length === 0&#10;            ? &#34;nada to do!&#34;&#10;            : todos.map(todo =&#62; {&#10;                return &#60;Todo key={todo.id} {...todo} /&#62;;&#10;              })}&#10;        &#60;/ul&#62;&#10;        &#60;hr /&#62;&#10;        &#60;NewTodo /&#62;&#10;      &#60;/div&#62;&#10;    );&#10;  }&#10;}
 </pre></code>
 
           <p><code>NewTodo.js</code></p>
-          <pre class="line-numbers"><code class="language-js noRun">
+          <pre class="line-numbers"><code class="language-jsx noRun">
 import React, { Component } from &#34;react&#34;;&#10;&#10;import { createTodo } from &#34;../actions/todoActions&#34;;&#10;&#10;class NewTodo extends Component {&#10;  constructor() {&#10;    super();&#10;    this.state = {&#10;      value: &#34;&#34;&#10;    };&#10;  }&#10;&#10;  handleChange = event =&#62; {&#10;    const value = event.target.value;&#10;    this.setState({ value });&#10;  };&#10;&#10;  handleSubmit = event =&#62; {&#10;    const { value } = this.state;&#10;    event.preventDefault();&#10;&#10;    if (value.trim() !== &#34;&#34;) createTodo(value);&#10;&#10;    this.setState({ value: &#34;&#34; });&#10;  };&#10;&#10;  render() {&#10;    const { value } = this.state;&#10;&#10;    return (&#10;      &#60;form className=&#34;NewItem&#34; onSubmit={this.handleSubmit}&#62;&#10;        &#60;input type=&#34;text&#34; value={value} onChange={this.handleChange} /&#62;&#10;        &#60;input type=&#34;submit&#34; value=&#34;create todo&#34; /&#62;&#10;      &#60;/form&#62;&#10;    );&#10;  }&#10;}&#10;&#10;export default NewTodo;&#10;
           </pre></code>
 
           <p><code>Todo.js</code></p>
-          <pre class="line-numbers"><code class="language-js noRun">
+          <pre class="line-numbers"><code class="language-jsx noRun">
 import React from &#34;react&#34;;&#10;&#10;import { deleteTodo } from &#34;../actions/todoActions&#34;;&#10;&#10;export default class Todo extends React.Component {&#10;  handleDelete = () =&#62; {&#10;    deleteTodo(this.props.id);&#10;  };&#10;  render() {&#10;    const { text } = this.props;&#10;&#10;    return (&#10;      &#60;li&#62;&#10;        &#60;span&#62;{text}&#60;/span&#62;&#10;        &#60;span&#62; - &#60;/span&#62;&#10;        &#60;button onClick={this.handleDelete}&#62;Done&#60;/button&#62;&#10;      &#60;/li&#62;&#10;    );&#10;  }&#10;} 
           </pre></code>
 
           <h3>3.2 - Dispatcher</h3>
 
           <p><code>dispatcher.js</code></p>
-          <pre class="line-numbers"><code class="language-js noRun">
+          <pre class="line-numbers"><code class="language-jsx noRun">
 import { Dispatcher } from &#34;flux&#34;;&#10;&#10;export default new Dispatcher;  
           </pre></code>
 
           <h3>3.3 - Actions</h3>
 
           <p><code>todoActions.js</code></p>
-          <pre class="line-numbers"><code class="language-js noRun">
+          <pre class="line-numbers"><code class="language-jsx noRun">
 import dispatcher from &#34;../dispatcher&#34;;&#10;&#10;export function createTodo(todoText) {&#10;  dispatcher.dispatch({&#10;    type: &#34;CREATE_TODO&#34;,&#10;    payload: todoText&#10;  });&#10;}&#10;&#10;export function deleteTodo(todoId) {&#10;  dispatcher.dispatch({&#10;    type: &#34;DELETE_TODO&#34;,&#10;    payload: todoId&#10;  });&#10;}
           </pre></code>
           <h3>3.4 - Stores (including pub/sub from EventEmitter)</h3>
 
           <p><code>todoStore.js</code></p>
 
-          <pre class="line-numbers"><code class="language-js noRun">
+          <pre class="line-numbers"><code class="language-jsx noRun">
 import { EventEmitter } from &#34;events&#34;;&#10;&#10;import dispatcher from &#34;../dispatcher&#34;;&#10;&#10;class TodoStore extends EventEmitter {&#10;  constructor() {&#10;    super();&#10;&#10;    // state&#10;    this.todos = [{ id: Date.now(), text: &#34;Eat Lunch&#34; }];&#10;&#10;    // register handlers with dispatcher so calling .dispatch()&#10;    // will result in a store knowing which method to call based&#10;    // based on action type&#10;    dispatcher.register(action =&#62; {&#10;      switch (action.type) {&#10;        case &#34;CREATE_TODO&#34;: {&#10;          this.createTodo(action.payload);&#10;          break;&#10;        }&#10;        case &#34;DELETE_TODO&#34;: {&#10;          this.deleteTodo(action.payload);&#10;          break;&#10;        }&#10;        default:&#10;      }&#10;    });&#10;  }&#10;&#10;  // methods that operate on store, then emits change event to subscribers:&#10;&#10;  createTodo(todoText) {&#10;    const id = Date.now();&#10;&#10;    this.todos = [&#10;      ...this.todos,&#10;      {&#10;        id,&#10;        text: todoText&#10;      }&#10;    ];&#10;&#10;    this.emit(&#34;change&#34;);&#10;  }&#10;&#10;  deleteTodo(todoId) {&#10;    this.todos = this.todos.filter(todo =&#62; todo.id !== todoId);&#10;    this.emit(&#34;change&#34;);&#10;  }&#10;&#10;  // interface to get current state of the store&#10;&#10;  getAllTodos() {&#10;    return this.todos;&#10;  }&#10;}&#10;&#10;export default new TodoStore();
 
 </pre></code>

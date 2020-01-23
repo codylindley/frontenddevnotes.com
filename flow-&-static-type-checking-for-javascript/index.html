@@ -226,10 +226,10 @@ References:
           <pre class="line-numbers"><code class="language-js noRun">
 // @flow  
 
-/* Flow is inferring that n in the function below should be a number not a string because it is pulling 
-JavaScript from a weakly typed language to a strongly typed language trying 
-to get it to error when ambiguity is introduced because of weakness in types or 
-native coercion routines/rules. */
+/* Flow is inferring that n in the function below should be a number not a string 
+because it is pulling JavaScript from a weakly typed language to a strongly typed 
+language trying to get it to error when ambiguity is introduced because of weakness 
+in types or native coercion routines/rules. */
 
 function square(n) {
   return n * n; // type error inferred because expression expects numbers not strings

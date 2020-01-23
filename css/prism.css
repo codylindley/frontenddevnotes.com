@@ -1,27 +1,28 @@
-/* PrismJS 1.13.0
-http://prismjs.com/download.html#themes=prism-twilight&languages=clike+javascript&plugins=line-highlight+line-numbers+toolbar+copy-to-clipboard */
-
+/* PrismJS 1.19.0
+https://prismjs.com/download.html#themes=prism-twilight&languages=markup+css+clike+javascript+jsx&plugins=line-highlight+line-numbers+toolbar+copy-to-clipboard */
 /**
  * prism.js Twilight theme
  * Based (more or less) on the Twilight theme originally of Textmate fame.
  * @author Remy Bach
  */
-
 code[class*="language-"],
 pre[class*="language-"] {
     color: white;
     background: none;
-    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+
     text-align: left;
-    text-shadow: 0 -0.1em 0.2em black;
+    text-shadow: 0 -.1em .2em black;
     white-space: pre;
     word-spacing: normal;
     word-break: normal;
     word-wrap: normal;
     line-height: 1.5;
+
     -moz-tab-size: 4;
     -o-tab-size: 4;
     tab-size: 4;
+
     -webkit-hyphens: none;
     -moz-hyphens: none;
     -ms-hyphens: none;
@@ -31,17 +32,16 @@ pre[class*="language-"] {
 
 pre[class*="language-"],
 :not(pre)>code[class*="language-"] {
-    background: #1c2023;
+    background: hsl(0, 0%, 8%);
     /* #141414 */
 }
 
 /* Code blocks */
-
 pre[class*="language-"] {
-    border-radius: 0.5em;
+    border-radius: .5em;
     /* #282A2B */
-    box-shadow: 1px 1px 0.5em black inset;
-    margin: 0.5em 0;
+    box-shadow: 1px 1px .5em black inset;
+    margin: .5em 0;
     overflow: auto;
     padding: 1em;
 }
@@ -59,7 +59,6 @@ pre[class*="language-"]::selection {
 }
 
 /* Text Selection colour */
-
 pre[class*="language-"]::-moz-selection,
 pre[class*="language-"] ::-moz-selection,
 code[class*="language-"]::-moz-selection,
@@ -79,13 +78,12 @@ code[class*="language-"] ::selection {
 }
 
 /* Inline code */
-
 :not(pre)>code[class*="language-"] {
-    border-radius: 0.3em;
-    border: 0.13em solid hsl(0, 0%, 33%);
+    border-radius: .3em;
+    border: .13em solid hsl(0, 0%, 33%);
     /* #545454 */
-    box-shadow: 1px 1px 0.3em -0.1em black inset;
-    padding: 0.15em 0.2em 0.05em;
+    box-shadow: 1px 1px .3em -.1em black inset;
+    padding: .15em .2em .05em;
     white-space: normal;
 }
 
@@ -98,11 +96,11 @@ code[class*="language-"] ::selection {
 }
 
 .token.punctuation {
-    opacity: 0.7;
+    opacity: .7;
 }
 
-.namespace {
-    opacity: 0.7;
+.token.namespace {
+    opacity: .7;
 }
 
 .token.tag,
@@ -168,7 +166,6 @@ pre[data-line] {
 }
 
 /* Markup */
-
 .language-markup .token.tag,
 .language-markup .token.attr-name,
 .language-markup .token.punctuation {
@@ -177,7 +174,6 @@ pre[data-line] {
 }
 
 /* Make the tokens sit above the line highlight so the colours don't look faded. */
-
 .token {
     position: relative;
     z-index: 1;
@@ -186,7 +182,7 @@ pre[data-line] {
 .line-highlight {
     background: hsla(0, 0%, 33%, 0.25);
     /* #545454 */
-    background: linear-gradient( to right, hsla(0, 0%, 33%, 0.1) 70%, hsla(0, 0%, 33%, 0));
+    background: linear-gradient(to right, hsla(0, 0%, 33%, .1) 70%, hsla(0, 0%, 33%, 0));
     /* #545454 */
     border-bottom: 1px dashed hsl(0, 0%, 33%);
     /* #545454 */
@@ -214,18 +210,18 @@ pre[data-line] {
     /* #F5F2F0 */
     content: attr(data-start);
     font: bold 65%/1.5 sans-serif;
-    left: 0.6em;
+    left: .6em;
     min-width: 1em;
-    padding: 0 0.5em;
+    padding: 0 .5em;
     position: absolute;
     text-align: center;
     text-shadow: none;
-    top: 0.4em;
-    vertical-align: 0.3em;
+    top: .4em;
+    vertical-align: .3em;
 }
 
 .line-highlight[data-end]:after {
-    bottom: 0.4em;
+    bottom: .4em;
     content: attr(data-end);
     top: auto;
 }
@@ -242,9 +238,12 @@ pre[data-line] {
     padding: inherit 0;
     margin-top: 1em;
     /* Same as .prism’s padding-top */
-    background: hsla(24, 20%, 50%, 0.08);
-    background: linear-gradient( to right, hsla(24, 20%, 50%, 0.1) 70%, hsla(24, 20%, 50%, 0));
+
+    background: hsla(24, 20%, 50%, .08);
+    background: linear-gradient(to right, hsla(24, 20%, 50%, .1) 70%, hsla(24, 20%, 50%, 0));
+
     pointer-events: none;
+
     line-height: inherit;
     white-space: pre;
 }
@@ -253,15 +252,15 @@ pre[data-line] {
 .line-highlight[data-end]:after {
     content: attr(data-start);
     position: absolute;
-    top: 0.4em;
-    left: 0.6em;
+    top: .4em;
+    left: .6em;
     min-width: 1em;
-    padding: 0 0.5em;
-    background-color: hsla(24, 20%, 50%, 0.4);
+    padding: 0 .5em;
+    background-color: hsla(24, 20%, 50%, .4);
     color: hsl(24, 20%, 95%);
     font: bold 65%/1.5 sans-serif;
     text-align: center;
-    vertical-align: 0.3em;
+    vertical-align: .3em;
     border-radius: 999px;
     text-shadow: none;
     box-shadow: 0 1px white;
@@ -270,7 +269,7 @@ pre[data-line] {
 .line-highlight[data-end]:after {
     content: attr(data-end);
     top: auto;
-    bottom: 0.4em;
+    bottom: .4em;
 }
 
 .line-numbers .line-highlight:before,
@@ -278,13 +277,13 @@ pre[data-line] {
     content: none;
 }
 
-pre.line-numbers {
+pre[class*="language-"].line-numbers {
     position: relative;
     padding-left: 3.8em;
     counter-reset: linenumber;
 }
 
-pre.line-numbers>code {
+pre[class*="language-"].line-numbers>code {
     position: relative;
     white-space: inherit;
 }
@@ -299,10 +298,12 @@ pre.line-numbers>code {
     /* works for line-numbers below 1000 lines */
     letter-spacing: -1px;
     border-right: 1px solid #999;
+
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
 }
 
 .line-numbers-rows>span {
@@ -313,7 +314,7 @@ pre.line-numbers>code {
 
 .line-numbers-rows>span:before {
     content: counter(linenumber);
-    color: rgb(80, 80, 80);
+    color: #999;
     display: block;
     padding-right: 0.8em;
     text-align: right;
@@ -321,18 +322,23 @@ pre.line-numbers>code {
 
 div.code-toolbar {
     position: relative;
-    margin-top: -3px;
 }
 
 div.code-toolbar>.toolbar {
     position: absolute;
-    top: 0.3em;
-    right: 0.2em;
+    top: .3em;
+    right: .2em;
     transition: opacity 0.3s ease-in-out;
     opacity: 0;
 }
 
 div.code-toolbar:hover>.toolbar {
+    opacity: 1;
+}
+
+/* Separate line b/c rules are thrown out if selector is invalid.
+    IE11 and old Edge versions don't support :focus-within. */
+div.code-toolbar:focus-within>.toolbar {
     opacity: 1;
 }
 
@@ -362,12 +368,12 @@ div.code-toolbar>.toolbar a,
 div.code-toolbar>.toolbar button,
 div.code-toolbar>.toolbar span {
     color: #bbb;
-    font-size: 0.8em;
-    padding: 0 0.5em;
+    font-size: .8em;
+    padding: 0 .5em;
     background: #f5f2f0;
     background: rgba(224, 224, 224, 0.2);
     box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
-    border-radius: 0.5em;
+    border-radius: .5em;
 }
 
 div.code-toolbar>.toolbar a:hover,

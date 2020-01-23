@@ -53,7 +53,7 @@
 
           <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/priceless-wing-wb5lf?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
 
-    <pre class="line-numbers"><code class="language-js noRun">
+    <pre class="line-numbers"><code class="language-jsx noRun">
 import React, { Component } from &#34;react&#34;;&#10;&#10;export default class Counter extends Component {&#10;  state = {&#10;    count: 0&#10;  };&#10;&#10;  handleIncrement = () =&#62; {&#10;    this.setState({&#10;      count: this.state.count + 1&#10;    });&#10;  };&#10;&#10;  handleDecrement = () =&#62; {&#10;    this.setState({&#10;      count: this.state.count - 1&#10;    });&#10;  };&#10;&#10;  reset = () =&#62; {&#10;    this.setState({&#10;      count: 0&#10;    });&#10;  };&#10;&#10;  render() {&#10;    const { count } = this.state;&#10;    return (&#10;      &#60;section className=&#34;Counter&#34;&#62;&#10;        &#60;h1&#62;Count: {count}&#60;/h1&#62;&#10;        &#60;button onClick={this.handleIncrement} className=&#34;full-width&#34;&#62;&#10;          Increment&#10;        &#60;/button&#62;&#10;        &#60;button onClick={this.handleDecrement} className=&#34;full-width&#34;&#62;&#10;          Decrement&#10;        &#60;/button&#62;&#10;        &#60;button onClick={this.reset} className=&#34;full-width&#34;&#62;&#10;          Reset&#10;        &#60;/button&#62;&#10;      &#60;/section&#62;&#10;    );&#10;  }&#10;}
 
 </pre></code>
@@ -64,7 +64,7 @@ import React, { Component } from &#34;react&#34;;&#10;&#10;export default class 
 
           <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/nice-hypatia-fdj5c?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
 
-<pre class="line-numbers"><code class="language-js noRun">
+<pre class="line-numbers"><code class="language-jsx noRun">
 import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#62; {&#10;  const [count, setCount] = useState(0);&#10;&#10;  const handleIncrement = () =&#62; {&#10;    setCount(count + 1);&#10;  };&#10;&#10;  const handleDecrement = () =&#62; {&#10;    setCount(count - 1);&#10;  };&#10;&#10;  const reset = () =&#62; {&#10;    setCount(0);&#10;  };&#10;&#10;  return (&#10;    &#60;section className=&#34;Counter&#34;&#62;&#10;      &#60;h1&#62;Count: {count}&#60;/h1&#62;&#10;      &#60;button onClick={handleIncrement} className=&#34;full-width&#34;&#62;&#10;        Increment&#10;      &#60;/button&#62;&#10;      &#60;button onClick={handleDecrement} className=&#34;full-width&#34;&#62;&#10;        Decrement&#10;      &#60;/button&#62;&#10;      &#60;button onClick={reset} className=&#34;full-width&#34;&#62;&#10;        Reset&#10;      &#60;/button&#62;&#10;    &#60;/section&#62;&#10;  );&#10;}&#10;&#10;export default Counter;
       </pre></code>
 
@@ -217,7 +217,7 @@ import React, { useState } from &#34;react&#34;;&#10;&#10;const Counter = () =&#
 
             <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/compassionate-einstein-gd16p?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
 
-            <pre class="line-numbers"><code class="language-js noRun">
+            <pre class="line-numbers"><code class="language-jsx noRun">
 import React, { useReducer } from &#34;react&#34;;&#10;&#10;const reducer = (state, action) =&#62; {&#10;  switch (action.type) {&#10;    case &#34;COUNT&#34;:&#10;      return { count: state.count + action.by };&#10;    case &#34;RESET&#34;:&#10;      return { count: state.count - state.count };&#10;    default:&#10;      throw new Error();&#10;  }&#10;}&#10;&#10;const Counter = () =&#62; {&#10;  const [state, dispatch] = useReducer(reducer, { count: 0 });&#10;&#10;  const handleIncrement = () =&#62; {&#10;    dispatch({ type: &#34;COUNT&#34;, by: 1 });&#10;  };&#10;&#10;  const handleDecrement = () =&#62; {&#10;    dispatch({ type: &#34;COUNT&#34;, by: -1 });&#10;  };&#10;  const reset = () =&#62; {&#10;    dispatch({ type: &#34;RESET&#34; });&#10;  };&#10;&#10;  return (&#10;    &#60;section className=&#34;Counter&#34;&#62;&#10;      &#60;h1&#62;Count: {state.count}&#60;/h1&#62;&#10;      &#60;button onClick={handleIncrement} className=&#34;full-width&#34;&#62;&#10;        Increment&#10;      &#60;/button&#62;&#10;      &#60;button onClick={handleDecrement} className=&#34;full-width&#34;&#62;&#10;        Decrement&#10;      &#60;/button&#62;&#10;      &#60;button onClick={reset} className=&#34;full-width&#34;&#62;&#10;        Reset&#10;      &#60;/button&#62;&#10;    &#60;/section&#62;&#10;  );&#10;};&#10;&#10;export default Counter;          
         </pre></code>
         <div class="notes">
@@ -243,13 +243,13 @@ This section will discuss how to handle values that are derived from locale stat
           <p>Javascript offers the <code>get</code> syntax which is perfect to derive a value from actual component state. In the example below the full name is being derived from the first and last name local component state.</p>
 
           <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/jovial-silence-eu401?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
-          <pre class="line-numbers"><code class="language-js noRun">
+          <pre class="line-numbers"><code class="language-jsx noRun">
 class FirstNameClass extends Component {&#10;  state = {&#10;    firstName: &#34;Cody&#34;,&#10;    lastName: &#34;Sooner&#34;&#10;  };&#10;&#10;  newNames = () =&#62; {&#10;    this.setState({&#10;      firstName: &#34;Taco&#34;,&#10;      lastName: &#34;Johns&#34;&#10;    });&#10;  };&#10;&#10;  get fullname() {&#10;    return `${this.state.firstName} ${this.state.lastName}`;&#10;  }&#10;&#10;  render() {&#10;    return (&#10;      &#60;&#62;&#10;        {this.fullname}&#10;        &#60;br /&#62;&#10;        &#60;button onClick={this.newNames}&#62;New Name&#60;/button&#62;&#10;      &#60;/&#62;&#10;    );&#10;  }&#10;}  
               </pre></code>
               <p>Here is a React Hooks version:</p>
 
               <div class="codesandboxlinkNotDynamic"><a href="https://codesandbox.io/s/weathered-cherry-25teg?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounter.js">run/edit in codesandbox.io</a></div>
-              <pre class="line-numbers"><code class="language-js noRun">
+              <pre class="line-numbers"><code class="language-jsx noRun">
 const Counter = () =&#62; {&#10;  const [firstName, setFirstName] = useState(&#34;Pat&#34;);&#10;  const [lastName, setlastName] = useState(&#34;Doe&#34;);&#10;&#10;  const newNames = () =&#62; {&#10;    setFirstName(&#34;Lee&#34;);&#10;    setlastName(&#34;Homer&#34;);&#10;  };&#10;&#10;  const getComputed = {&#10;    get fullname() {&#10;      return `${firstName} ${lastName}`;&#10;    }&#10;  };&#10;&#10;  return (&#10;    &#60;&#62;&#10;      {getComputed.fullname}&#10;      &#60;br /&#62;&#10;      &#60;button onClick={newNames}&#62;newNames&#60;/button&#62;&#10;    &#60;/&#62;&#10;  );&#10;};
                   </pre></code>
 
