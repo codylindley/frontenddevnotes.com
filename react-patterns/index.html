@@ -55,11 +55,11 @@
           <p>
             You will hear this pattern called container components, smart
             components, or controller components/views. Basically, when you wrap
-            a component around another presentational/dumb/stateless component
-            and the outer component deals only with setting and getting
-            data/state/store stuff that is then pass down to the
+            a component around presentational/dumb/stateless component(s) and,
+            the outer component deals only with setting and getting
+            data/state/store stuff, that is then pass down to the
             presentational/dumb/stateless components via props/context, you are
-            dealing with a container/smart/controller component.
+            dealing with a container/smart/controller component pattern.
           </p>
 
           <h3>1.2 - Example(s)</h3>
@@ -71,8 +71,8 @@
           </p>
 
           <p>
-            <code>CommentList.js</code>is a presentational/dump/stateless
-            component:
+            <code>CommentList.js</code> is a presentational/dump/stateless
+            component (i.e. it takes data in and displays it):
           </p>
 
           <pre class="line-numbers"><code class="language-jsx noRun">
@@ -81,7 +81,8 @@ import React from &#34;react&#34;;&#10;&#10;const Commentlist = ({comments}) =&#
 
           <p>
             <code>CommentListContainer.js</code> is a container/smart/controller
-            component:
+            component (it manages data and sends it to other components for
+            display):
           </p>
 
           <pre class="line-numbers"><code class="language-jsx noRun">
@@ -89,10 +90,8 @@ import React from &quot;react&quot;;&#10;import CommentList from &quot;./Comment
           </code></pre>
 
           <p>
-            Below is another example of using the
-            <code>CounterContainer.js</code> container/smart/controller
-            component to separate/lift up state away from UI components (i.e.
-            <code>&lt;Count&gt;</code> and <code>&lt;Button&gt;</code>):
+            The code example below is another example of the
+            container/smart/controller component:
           </p>
 
           <iframe
@@ -104,10 +103,11 @@ import React from &quot;react&quot;;&#10;import CommentList from &quot;./Comment
           ></iframe>
 
           <p>
-            The container/smart/controller &lt;CounterContainer&gt; component
-            manages the state while the dump/stateless &lt;Count&gt; and
-            &lt;Button&gt; components consume state from the container component
-            above it via props.
+            The container/smart/controller
+            <code>&lt;CounterContainer&gt;</code> component manages the state
+            while the dump/stateless <code>&lt;Count&gt;</code> and
+            <code>&lt;Button&gt;</code> components consume state related
+            concerns from the container component above it via props.
           </p>
 
           <h3>1.3 - When do I use the pattern?</h3>
@@ -146,8 +146,8 @@ import React from &quot;react&quot;;&#10;import CommentList from &quot;./Comment
           <h3>2.2 - Example(s)</h3>
 
           <p>
-            Image you wanted every component to have the same prop sent to it.
-            You could create a HOC to wrapped every component you create so it
+            Imagine you want several components to share the same exact prop.
+            This can be done by creating a HOC to wrapped any component so it
             always gets exactly the same prop (Note: would work with state too,
             not just props).
           </p>
@@ -155,33 +155,48 @@ import React from &quot;react&quot;;&#10;import CommentList from &quot;./Comment
           <p>HOC (<code>withReactNameProp.js</code>):</p>
 
           <pre class="line-numbers"><code class="language-jsx noRun">
-import React from &quot;react&quot;;&#10;&#10;function withReactNameProp(WrappedComponent) {&#10;  return class extends React.Component {&#10;    render() {&#10;      return &lt;WrappedComponent name=&quot;React&quot; {...this.props} /&gt;;&#10;    }&#10;  };&#10;}&#10;&#10;export default withReactNameProp;
+import React from &quot;react&quot;;&#10;&#10;function withReactNameProp(WrappedComponent) {&#10;  // this component wraps the component passed in i.e. WrappedComponent&#10;  return class extends React.Component {&#10;    // give it name in component tree otherwise name is generic &quot;_class&quot;&#10;    static displayName = &quot;withReactNameProp&quot;;&#10;    render() {&#10;      return &lt;WrappedComponent name=&quot;React&quot; {...this.props} /&gt;;&#10;    }&#10;  };&#10;}&#10;&#10;export default withReactNameProp;
 
 </code></pre>
 
           <p>Component to be wrapped (<code>Hello.js</code>):</p>
 
           <pre class="line-numbers"><code class="language-jsx noRun">
-import React from &quot;react&quot;;&#10;import withReactNameProp from &quot;./withReactNameProp&quot;;&#10;&#10;// foo comes from &lt;Hello foo=&quot;bar&quot;&gt;&#10;// the name &quot;React&quot; comes from HOC&#10;const Hello = ({ name, foo }) =&gt; {&#10;  return (&#10;    &lt;&gt;&#10;      {foo} // prints "bar" works because of {...this.props} in HOC&#10;      &lt;h1&gt;Hello {name}!&lt;/h1&gt;&#10;    &lt;/&gt;&#10;  );&#10;};&#10;&#10;export default withReactNameProp(Hello);
+import React from &quot;react&quot;;&#10;import withReactNameProp from &quot;./withReactNameProp&quot;;&#10;&#10;// foo comes from &lt;Hello foo=&quot;bar&quot;&gt;&#10;// the name &quot;React&quot; comes from HOC&#10;const Hello = ({ name, foo }) =&gt; {&#10;  return (&#10;    &lt;&gt;&#10;      {foo} {/* prints &quot;bar&quot; works because of {...this.props} in HOC */}&#10;      &lt;h1&gt;Hello {name}!&lt;/h1&gt; {/* prints &quot;React&quot; works because HOC passes name prop */}&#10;    &lt;/&gt;&#10;  );&#10;};&#10;&#10;// Hello becomes &lt;withReactNameProp&gt;&lt;Hello /&gt;&lt;/withReactNameProp&gt;&#10;export default withReactNameProp(Hello);
 
 </code></pre>
 
           <p>Using the Wrapped Component (<code>index.js</code>):</p>
 
           <pre class="line-numbers"><code class="language-jsx noRun">
-import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&quot;;&#10;&#10;import Hello from &quot;./Hello&quot;;&#10;&#10;ReactDOM.render(&lt;Hello foo=&quot;bar&quot; /&gt;, document.getElementById(&quot;root&quot;));
+import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&quot;;&#10;&#10;import Hello from &quot;./Hello&quot;;&#10;&#10;// &lt;Hello /&gt; is really &lt;withReactNameProp&gt;&lt;Hello /&gt;&lt;/withReactNameProp&gt;&#10;ReactDOM.render(&lt;Hello foo=&quot;bar&quot; /&gt;, document.getElementById(&quot;root&quot;));
 
 </code></pre>
 
           <h3>2.3 - When do I use the patten?</h3>
 
           <p>
-            When you want to re-use the details of component with any number of
+            When you want to share the details of component with any number of
             other components. A common use case is sharing the same state setup
-            with an number of components (e.g. Counter) so each instance will
-            have its own state setup but you only have to define the state setup
-            once.
+            with any number of components so each instance will have its own
+            state setup but you only have to define the state setup once (i.e.
+            the HOC pattern is a DRY'ing (don't repeat yourself) technique so
+            you can reuses parts of program without duplicating the program over
+            and over).
           </p>
+
+          <p>
+            Below is an example of using this pattern to share state for
+            <code>&lt;Counter /&gt;</code>:
+          </p>
+
+          <iframe
+            src="https://codesandbox.io/embed/quizzical-mclaren-v5ge4?fontsize=14&hidenavigation=1&module=%2Fsrc%2FwithCounterState.js"
+            title="quizzical-mclaren-v5ge4"
+            allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+            style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;"
+            sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+          ></iframe>
         </div>
 
         <div id="chapter3" class="chapter">
@@ -198,8 +213,8 @@ import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&qu
           <p>
             The <code>props</code> value passed to React components has a
             special value on it called <code>props.children</code>. The
-            <code>children</code> value is the child value defined, when the
-            component is used (e.g.<code>
+            <code>children</code> value is the child value of the component when
+            the component is used (e.g.<code>
               &lt;Component&gt; this is the children value here
               &lt;/Component&gt;</code
             >).
@@ -212,39 +227,37 @@ import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&qu
           </p>
 
           <p>
-            If you think about it the children/child value of a component can be
-            any type of JavaScript value not just strings, components, or JSX
-            (e.g. could be a function too or really any javascript expression).
-            Remember this when you look at the Render Props Pattern/
+            If you think about it the children value of a component can be any
+            type of JavaScript value not just strings, components, or JSX (e.g.
+            could be a function too or really any javascript expression. Keep
+            this in mind when you look at the Render Props Pattern).
           </p>
 
           <p>
-            If one created a <code>&lt;Button&gt;</code> component how could one
-            get dynamic (prop like) values into the component when it is used
-            (aka
-            <a href="https://reactjs.org/docs/composition-vs-inheritance.html"
-              >composition</a
-            >). The answer is <code>props.children</code>. In the
+            In the
             <a
               href="https://codesandbox.io/s/falling-night-c39pu?fontsize=14&hidenavigation=1&theme=dark"
               >code example</a
             >
             below what do you think is the text shown on the
             <code>&lt;Button&gt;</code> when it is viewed in the UI (i.e.,
-            "click me" or "I'm available for composition"?)
+            "delete" or "I'm available for composition"?)
           </p>
 
           <pre class="line-numbers"><code class="language-jsx noRun">
-import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&quot;;&#10;&#10;const Button = () =&gt; {&#10;  return &lt;button&gt;click me&lt;/button&gt;;&#10;};&#10;&#10;ReactDOM.render(&#10;  &lt;Button&gt;I&apos;m available for composition&lt;/Button&gt;,&#10;  document.getElementById(&quot;root&quot;)&#10;);
+import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&quot;;&#10;&#10;const Button = () =&gt; {&#10;  return &lt;button&gt;delete&lt;/button&gt;;&#10;};&#10;&#10;ReactDOM.render(&#10;  &lt;Button&gt;I&apos;m available for composition&lt;/Button&gt;,&#10;  document.getElementById(&quot;root&quot;)&#10;);
 
 </code></pre>
 
           <p>
-            If you said "click me" then you are correct. But what if we wanted
-            to pass the text shown in the UI to the
-            <code>&lt;Button&gt;</code> component when it is used. To do this we
-            could use <code>props</code> but we could also use use
-            <code>props.children</code> (a builtin prop always available).
+            If you said "delete" then you are correct. But what if we didn't
+            wanted the buttons text to be hard coded inside of the
+            <code>&lt;Button&gt;</code>? What if we wanted to pass the button's
+            text when the component is used (i.e. making the
+            <code>&lt;Button&gt;</code> reusable). To do this we could use
+            <code>props</code>, but we could also use
+            <code>props.children</code> which contains:, "the content between
+            the opening and closing tags of a component".
           </p>
 
           <pre class="line-numbers"><code class="language-jsx noRun">
@@ -253,10 +266,10 @@ import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&qu
 </code></pre>
 
           <p>
-            In the previous code example, now the
+            Now the
             <code>&lt;Button&gt;</code> will always show the child content
-            passed to the to the <code>&lt;Button&gt;</code> when is is used
-            (again, this facilitates
+            passed to the <code>&lt;Button&gt;</code>
+            (this facilitates
             <a href="https://reactjs.org/docs/composition-vs-inheritance.html"
               >composition</a
             >)
@@ -266,14 +279,20 @@ import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&qu
             If the <code>props.children</code> value was not available then
             composition would all have to happen via <code>props</code> alone.
             Which could get really unwieldy and ugly fast if you have a lot
-            composition going on. So <code>props.children</code> can be used
-            when you need to output the contents of a component to the UI.
+            composition going on (i.e. a lof other components as children). So
+            <code>props.children</code> can be used when you need to output the
+            contents of a component to the UI.
           </p>
 
           <h3>3.3 - Example(s)</h3>
 
+          <p>
+            The example below contrast both <code>props</code> and
+            <code>props.children</code> composition:
+          </p>
+
           <pre class="line-numbers"><code class="language-jsx noRun">
-function Posts(props){&#10;  return (&#10;      &lt;div className=&quot;posts&quot;&gt;&#10;        {props.children}&#10;      &lt;/div&gt;&#10;  )&#10;&#10;}&#10;&#10;function Share(props){&#10;    return (&#10;        &lt;div&gt;&#10;          &lt;button&gt;{props.name}&lt;/button&gt;&#10;        &lt;/div&gt;&#10;    )&#10;}&#10;&#10;&#10;&lt;Posts&gt;&#10;    &lt;h1&gt;this my heading&lt;/h1&gt;&#10;    &lt;p&gt;this is big old post&lt;/p&gt;&#10;    &lt;Share name=&quot;facebook&quot;/&gt;&#10;    &lt;Share name=&quot;twitter&quot;/&gt;&#10;&lt;/Posts&gt;
+function Posts(props){&#10;  return (&#10;    &lt;div className=&quot;posts&quot;&gt;&#10;      {props.children}&#10;    &lt;/div&gt;&#10;  )&#10;&#10;}&#10;&#10;function Share(props){&#10;  return (&#10;    &lt;div&gt;&#10;      &lt;button&gt;{props.name}&lt;/button&gt;&#10;    &lt;/div&gt;&#10;  )&#10;}&#10;&#10;&#10;&lt;Posts&gt; {/* Post wraps the JSX and Share components */}&#10;    &lt;h1&gt;this my heading&lt;/h1&gt;&#10;    &lt;p&gt;this is big old post&lt;/p&gt;&#10;    &lt;Share name=&quot;facebook&quot;/&gt; {/* uses props but could have used props.children */}&#10;    &lt;Share name=&quot;twitter&quot;/&gt; {/* uses props but could have used props.children */}&#10;&lt;/Posts&gt;
 
 </code></pre>
 
@@ -309,17 +328,64 @@ function Posts(props){&#10;  return (&#10;      &lt;div className=&quot;posts&qu
           <h3>4.1 - What is the Render Props Pattern?</h3>
 
           <p>
-            Not unlike the React HOC pattern the Render Props Pattern is used to
-            share
+            The render props pattern involves passing a function, that returns a
+            component/JSX, via <code>props</code> to a component that then
+            invokes that function, providing it with arguments (typically the
+            arguments have things you want to reuse).
           </p>
 
           <h3>4.2 - Example(s)</h3>
 
-          <p></p>
+          <p>
+            Imagine you want several components to share the same value. This
+            can be done by using a render prop on the Component containing the
+            value you want to share. For example, what if you wanted to share
+            the value <code>{ name: "react" }</code> with two or more components
+            and you don't want to repeat yourself.
+          </p>
+          <pre class="line-numbers"><code class="language-jsx noRun">
+import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&quot;;&#10;&#10;// create a component that shares stuff e.g. { name: "react" }&#10;const NameReactViaRenderProp = props =&gt; {&#10;  // could share state using class component or hooks too&#10;  return props.render({ name: &quot;react&quot; });&#10;};&#10;&#10;// Create a Hello component that share {name: &apos;react&apos;}&#10;// Really {name: &apos;react&apos;} could be any value&#10;const Hello = () =&gt; {&#10;  return (&#10;    &lt;NameReactViaRenderProp&#10;      render={({ name }) =&gt; {// render prop&#10;        // a function passed to a component via props&#10;        return &lt;h1&gt;Hello {name}!&lt;/h1&gt;;&#10;      }}&#10;    /&gt;&#10;  );&#10;};&#10;&#10;ReactDOM.render(&#10;  &lt;&gt;&#10;    &lt;Hello /&gt; &lt;Hello /&gt;&#10;  &lt;/&gt;,&#10;  document.getElementById(&quot;root&quot;)&#10;);
+  </code></pre>
+
+          <p>
+            Not unlike the React HOC pattern the Render Props Pattern is used to
+            reuses the details of another component by wrapping a container
+            component around the a dumb/presentation/stateless component.
+          </p>
+
+          <p>
+            Note that one does see a similar pattern using only
+            <code>props.children</code>:
+          </p>
+
+          <pre class="line-numbers"><code class="language-jsx noRun">
+import React from &quot;react&quot;;&#10;import ReactDOM from &quot;react-dom&quot;;&#10;&#10;// create a component that shares stuff e.g. { name: &quot;react&quot; }&#10;const NameReactViaPropsChildren = (props) =&gt; {&#10;  // could share state using class component or hooks too&#10;  return props.children({ name: &quot;react&quot; });&#10;};&#10;&#10;// Create a Hello component that uses {name: &apos;react&apos;}&#10;// Reacly {name: &apos;react&apos;} could be any value&#10;const Hello = () =&gt; {&#10;  return (&#10;    &lt;NameReactViaPropsChildren&gt;&#10;    {/* a function passed to a component via props.children */}&#10;      {({ name }) =&gt; {&#10;        return &lt;h1&gt;Hello {name}!&lt;/h1&gt;;&#10;      }}&#10;    &lt;/NameReactViaPropsChildren&gt;&#10;  );&#10;};&#10;&#10;ReactDOM.render(&#10;  &lt;&gt;&#10;    &lt;Hello /&gt; &lt;Hello /&gt;&#10;  &lt;/&gt;,&#10;  document.getElementById(&quot;root&quot;)&#10;);
+</code></pre>
 
           <h3>4.3 - When do I use the patten?</h3>
 
-          <p></p>
+          <p>
+            When you want to re-use the details of component with any number of
+            other components. A common use case is sharing the same state setup
+            with any number of components so each instance will have its own
+            state setup but you only have to define the state setup once (i.e.
+            the Render Props pattern is a code DRY'ing (don't repeat yourself)
+            technique so you can reuses parts of program without duplicating the
+            program over and over).
+          </p>
+
+          <p>
+            Below is an example of using this pattern to share state for
+            <code>&lt;Counter /&gt;</code>:
+          </p>
+
+          <iframe
+            src="https://codesandbox.io/embed/wonderful-tesla-6344p?fontsize=14&hidenavigation=1&module=%2Fsrc%2FCounterStateViaRenderProp.js"
+            title="wonderful-tesla-6344p"
+            allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+            style="width:100%; height:700px; border:0; border-radius: 4px; overflow:hidden;"
+            sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+          ></iframe>
         </div>
       </div>
     </div>
