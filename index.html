@@ -5,13 +5,6 @@
     <meta charset="utf-8" />
 
     <title>Front-end Developer Notes</title>
-    <meta name="description" content="" />
-    <meta name="author" content="SitePoint" />
-    <link
-      rel="stylesheet"
-      href="css/flexboxgrid/flexboxgrid.min.css"
-      media="all"
-    />
     <link rel="stylesheet" href="css/reset.css" />
     <style>
       h1 {
@@ -36,19 +29,36 @@
         text-transform: uppercase;
       }
 
-      a.book {
-        border: 1px solid #ccc;
-        height: 150px;
-        width: 120px;
-        background-color: #ebedef;
-        display: inline-block;
+      ul {
+        display: inline;
+        text-align: center;
       }
 
-      .booktext {
-        display: inline-block;
-        margin: 30% 10% 10% 10%;
-        text-align: left;
-        line-height: 1.3em;
+      ul li {
+        margin: 15px 0;
+      }
+
+      a {
+        transition: color 0.4s;
+        color: #265c83;
+      }
+
+      a:link {
+        color: #0066cc;
+      }
+      a:visited {
+        color: #cc33cc;
+      }
+      a:hover {
+        color: #7fdbff;
+      }
+      a:active {
+        transition: color 0.3s;
+        color: #336666;
+      }
+
+      .link {
+        text-decoration: none;
       }
     </style>
   </head>
@@ -67,67 +77,54 @@
       <section>
         <h3>JavaScript Applications:</h3>
 
-        <div class="row center-md">
-          <div class="col-xs-1">
-            <a
-              class="book"
-              href="application-website-state/index.html"
-              target="_blank"
-            >
-              <span class="booktext"> Application & Website State</span>
+        <ul>
+          <li>
+            <a href="application-website-state/index.html" target="_blank">
+              Application & Website State
             </a>
-          </div>
-        </div>
+          </li>
+        </ul>
       </section>
 
       <section>
         <h3>JavaScript Types:</h3>
-        <div class="row center-md">
-          <div class="col-xs-1">
+        <ul>
+          <li>
             <a
-              class="book"
               href="flow-&-static-type-checking-for-javascript/index.html"
               target="_blank"
             >
-              <span class="booktext">
-                Flow & Static Type Checking for JavaScript</span
-              >
+              <span> Flow & Static Type Checking for JavaScript</span>
             </a>
-          </div>
-        </div>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>React:</h3>
+        <ul>
+          <li>
+            <a href="react-patterns/index.html" target="_blank">
+              <span>React Patterns</span>
+            </a>
+          </li>
+        </ul>
       </section>
 
       <section>
         <h3>React & State:</h3>
-        <div class="row center-md">
-          <div class="col-xs-1">
-            <a class="book" href="react-patterns/index.html" target="_blank">
-              <span class="booktext">React Patterns</span>
+        <ul>
+          <li>
+            <a href="react-component-state/index.html" target="_blank">
+              <span> React Component State</span>
             </a>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <h3>React & State:</h3>
-        <div class="row center-md">
-          <div class="col-xs-1">
-            <a
-              class="book"
-              href="react-component-state/index.html"
-              target="_blank"
-            >
-              <span class="booktext"> React Component State</span>
+          </li>
+          <li class="col-xs-2">
+            <a href="react-flux/index.html" target="_blank">
+              <span> Flux State Management Pattern (in React)</span>
             </a>
-          </div>
-          <div class="col-xs-2">
-            <a class="book" href="react-flux/index.html" target="_blank">
-              <span class="booktext">
-                Flux State Management Pattern (in React)</span
-              >
-            </a>
-          </div>
-        </div>
+          </li>
+        </ul>
       </section>
     </main>
 
