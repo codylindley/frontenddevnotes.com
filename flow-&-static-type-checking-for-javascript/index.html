@@ -1293,7 +1293,7 @@ stringify("foo");
         </div>
 
         <div id="chapter5" class="chapter">
-          <h2>5 : Not Basic Flow Type Annotations</h2>
+          <h2>5 : Advanced Flow Type Annotations</h2>
 
           <section class="sub">
             <p>
@@ -1398,6 +1398,34 @@ checkWhichContactInfo({name:'jill',phone:'0-000-00000'});
   </code></pre>
 
           <h3>5.4 - Intersection Types</h3>
+
+          <p>
+            Intersection types take in multiple type definitions and use all of
+            them as a type of value.
+          </p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+// @flow
+
+type A = { a: number };
+type B = { b: boolean };
+type C = { c: string };
+
+function method(value: A & B & C) {
+  // ...
+}
+
+method({ a: 1, b: true, c: 'three' });
+
+/* These would error
+
+method({ a: 1 }); 
+
+method({ a: 1, b: true });
+
+*/
+    
+    </code></pre>
 
           <h3>5.5 - Generic Types</h3>
         </div>
