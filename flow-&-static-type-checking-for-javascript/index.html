@@ -1349,20 +1349,57 @@ let tuple: [number, number] = array; // This will error
 
           <p>
             Union types make it possible for a value to potentially be one of a
-            set of types.
+            set of different Flow types. Think of them as the ability to tell
+            Flow, a value can be this type or this type or this type or this
+            type.
           </p>
 
           <pre class="line-numbers"><code class="language-js noRun">
-
+// myValue can be a string or a number or undefined
 let myValue: string | number | void;
-
-undefined
 
 </code></pre>
 
-          <h3>5.3 - Intersection Types</h3>
+          <div class="notes">
+            <p>
+              <strong>Note:</strong>
+            </p>
+            <ol>
+              <li>
+                Each of the members of a union type can be any type, even
+                another union type.
+              </li>
+            </ol>
+          </div>
 
-          <h3>5.4 - Generic Types</h3>
+          <h3>5.3 - Disjoint Union Types</h3>
+
+          <p>
+            A "disjoint union" as Flow calls it is the intersection or overlap
+            between two types.
+          </p>
+
+          <pre class="line-numbers"><code class="language-js noRun">
+type emailAndName = { name: string, email: string };
+type phoneAndName  = { name: string, phone: string };
+
+function checkWhichContactInfo(info: emailAndName | phoneAndName):string {
+  if (info.email) {
+    return 'email';
+  } else {
+    return 'phone';
+  }
+}
+
+checkWhichContactInfo({name:'bill',email:'bill@hotmail.com'});
+
+checkWhichContactInfo({name:'jill',phone:'0-000-00000'});
+  
+  </code></pre>
+
+          <h3>5.4 - Intersection Types</h3>
+
+          <h3>5.5 - Generic Types</h3>
         </div>
 
         <div id="chapter6" class="chapter">
