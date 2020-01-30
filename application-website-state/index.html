@@ -189,7 +189,7 @@
             after a period of time.
           </p>
 
-          <h3>2.1 : Short-lasting state (aka session state)</h3>
+          <h3>2.2 : Short-lasting state (aka session state)</h3>
 
           <p>
             Short-lasting state typically has a pre-conceived end, but does not
@@ -200,11 +200,17 @@
             going to keep you logged for X number of minutes or until you close
             the browser session, then the state of being logged in for that
             session is lost, but it is designed to be held for a known period of
-            time (e.g. <a href=="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage"><code>sessionStorage</code></a>).
+            time (e.g.
+            <code
+              ><a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage"
+                >sessionStorage</a
+              ></code
+            >).
           </p>
 
           <h3>
-            2.2 : Long lasting state (aka permanently stored state or persisted
+            2.3 : Long lasting state (aka permanently stored state or persisted
             state)
           </h3>
 
@@ -221,87 +227,128 @@
             data is removed, it is likely long lasting state. Many think of long
             lasting state as back-end data but the client can also store long
             lasting data (i.e. indefinite cookies,
-            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"><code>localStorage</code></a> etc...)
+            <code
+              ><a
+                href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage"
+                >localStorage</a
+              ></code
+            >
+            etc...)
           </p>
+
+          <div class="notes">
+            <p>
+              <strong>Keep In Mind:</strong>
+            </p>
+            <ol>
+              <li>
+                State is commonly trivialize for good reason into two buckets
+                based on its relationship to time. State that is save (i.e.
+                data) to the back-end and state that is temporary (i.e. the
+                current value of a text input). This simplified delineation can
+                be helpful at times.
+              </li>
+            </ol>
+          </div>
         </div>
 
         <div id="chapter3" class="chapter">
           <h2>
-            3 : Organizing state by scope relevancy (i.e. what/who needs this
+            3 : Types of State based on its nature.
+          </h2>
+
+          <section class="sub">
+            <p>
+              This section catagories the most common types of state by the
+              nature of the state itself.
+            </p>
+          </section>
+          <p>Type of state:</p>
+          <ul>
+            <li>
+              <strong>Session state:</strong> State about the users current
+              interaction with the website or application (e.g. are they
+              logged). Typically session state can be short-lasting or
+              long-lasting.
+            </li>
+            <li>
+              <strong
+                >Entity (aka Domain or Data or Business Logic or Model
+                state):</strong
+              >
+              A banking apps Entity state could be the account information or
+              ledger for the banking account. Typically entity state is long
+              lasting state. Think of Entity state as the data in your
+              application (e.g. if it is a todo app the data of a todo
+              application is a todo).
+            </li>
+            <li>
+              <strong>Communication state:</strong> State concerned with
+              communication to non-local content. Is the user connected? Is the
+              front-end talking to the back-end. Waiting on the Back-end.
+              Typically entity state can be non-lasting, short-lasting, or long
+              lasting state.
+            </li>
+            <li>
+              <strong>Location state:</strong> Where the user is in the website
+              or application and how the url effects the state of things the
+              user is doing at a specific location. Typically location state can
+              be short-lasting or long-lasting.
+            </li>
+            <li>
+              <strong>UI state (aka view state):</strong> Where the user is in
+              the website or application and how the url effects the state of
+              things the user is doing at a specific location. Typically
+              location state can be short-lasting or long-lasting.
+            </li>
+          </ul>
+        </div>
+
+        <div id="chapter4" class="chapter">
+          <h2>
+            4 : Organizing state in relation to scope (i.e. what/who needs this
             state)
           </h2>
 
           <section class="sub">
             <p>
-              The nature of state in terms of time and storage is only one facet
-              of state as discussed in the previous notes. However, another
-              facet of state or way to organize it, is defining who needs access
-              to it and for how long. Often, developers will divide state into
-              Global state and Relative state. These catagories can be helpful
-              when managing a lot of state.
+              A facet of state or way to organize it, is defining who needs
+              access to it. Often, developers will divide state into Global
+              state and Relative state. These catagories can be helpful when
+              managing a lot of state.
             </p>
           </section>
 
-          <h3>3.1 : Global State (aka Complex State)</h3>
+          <h3>4.1 : Global State (aka Accessible Everywhere State)</h3>
 
           <p>
-            Global state is typically, but not always long lasting state that
-            needs to be accessible from every part of your application. Examples
-            of global state could be session state, entity state (aka Domain or
-            Data or Model or Business Logic state), communication state, and
-            location state.
+            Global state needs to be accessible from every part of your
+            application.
           </p>
-
-          <ul>
-            <li>
-              Session state: State about the users current interaction with the
-              website or application. Typically session state can be
-              short-lasting or long-lasting.
-            </li>
-            <li>
-              Entity (aka Domain or Data or Business Logic or Model state): A
-              banking apps Entity state could be the account information or
-              ledger for the banking account. Typically entity state is long
-              lasting state.
-            </li>
-            <li>
-              Communication state: State concerned with communication to
-              non-local content. Typically entity state can be non-lasting,
-              short-lasting, or long lasting state.
-            </li>
-            <li>
-              Location state: where the user is in the website or application
-              and how the url effects the state of things the user is doing at a
-              specific location. Typically location state can be short-lasting
-              or long-lasting.
-            </li>
-          </ul>
 
           <p>
             Global state is typically stored either in global state "Stores"
-            external to UI component trees (e.g. React) or at the very top of a UI component tree/branch.
-            Once an application requires a significant amount of global state,
-            used by many different components at many different locations in the
-            component tree, developers will often start to use a third party
-            state manager like Redux or Mobx. Often this is done to avoid prop
-            drilling and boiler plated create from the avoidance of prop drilling
-            (i.e. The React context api).
+            external to UI component trees (e.g. React) or at the very top of a
+            UI component tree/branch. Once an application requires a significant
+            amount of global state, used by many different components at many
+            different locations in the component tree, developers will often
+            start to use a third party state manager like Redux or Mobx. Often
+            this is done to avoid prop drilling and boilerplate create from the
+            avoidance of prop drilling (i.e. The React context api).
           </p>
 
-          <h3>3.2 : Relative State (aka local state or component state)</h3>
+          <h3>4.2 : Relative State (aka local state or component state)</h3>
 
           <p>
             Relative state is called relative state because the state is not
             typically required to be accessible to the entire application and is
             likely relative or local to a part of the application but not all of
-            it, all the time. Relative state is typically label as view/UI state,
-            but it can include relative state that is non-lasting, short-lived,
-            or even long lasting. Relative state is stored in the client as
-            close as possible to the part(s) of the app that need it. That is
-            why it is called relative, because it is relative to something
-            specific. In a React application this could be the internal state of
-            a component or state that is consumed from a close by ancestral
-            component (aka a container component or a smart component).
+            it, all the time. Relative state is stored in the client as close as
+            possible to the part(s) of the app that need it. That is why it is
+            called relative, because it is relative to something specific. In a
+            React application this could be the internal state of a component or
+            state that is consumed from a close by ancestral component (aka a
+            container component or a smart component).
           </p>
 
           <div class="notes">
@@ -323,33 +370,32 @@
 
           <p>
             The line between global state and relative state can be a very
-            subjective practice. Some think about state only in terms of global
-            state stores (e.g., Redux, Flux, or Mobx). Others think only in terms of relative state (i.e. when its relative to all components it is simply global). Many
-            developers advocate and will use both, based on the nature of the
-            state being either global or relative.
+            subjective practice. Does one keep all of their state in global
+            store(s) or does use both global state stores (e.g. Redux or Mobx)
+            and local component state? Which type of state is keep where?
           </p>
         </div>
 
-        <div id="chapter4" class="chapter">
+        <div id="chapter5" class="chapter">
           <h2>
-            4 : Third-party state managers (e.g. Flux, Redux, Mobx, Apollo
+            5 : Third-party state managers (e.g. Flux, Redux, Mobx, Apollo
             Client, unstated etc.) v.s. component state (e.g. React component
             state)
           </h2>
 
           <section class="sub">
             <p>
-              What is the different between third-party state managers and
-              local component state?
+              What is the different between third-party state managers and local
+              component state?
             </p>
           </section>
 
           <p>
             Fundamentally third-party state managers manage state outside of a
             tree of components inside of stores while local component state
-            solutions manage state within the component tree relative to components. As an
-            example, React has several mechanisms to manage state within a
-            component (e.g.,
+            solutions manage state within the component tree relative to
+            components. As an example, React has several mechanisms to manage
+            state within a component (e.g.,
             <code>this.setState()</code>, <code>this.state</code>,
             <code>useState()</code>, <code>useReducer()</code>) while Redux
             moves state and it's management to an object external from the
@@ -365,8 +411,8 @@
           </p>
         </div>
 
-        <div id="chapter5" class="chapter">
-          <h2>5 : State Stores</h2>
+        <div id="chapter6" class="chapter">
+          <h2>6 : State Stores</h2>
 
           <section class="sub">
             <p>
@@ -388,29 +434,30 @@
           </p>
         </div>
 
-        <div id="chapter6" class="chapter">
-          <h2>6 : Derived or computed values from state</h2>
+        <div id="chapter7" class="chapter">
+          <h2>7 : Derived or computed values from state</h2>
 
           <section class="sub">
             <p>
               State should only be made up of the bare minimum things that
               change over time excluding things that can be derived or computed
-              from minimal state seeds. Thus, anything that can be derived should be derived avoiding unnecessary state.
+              from minimal state seeds. Thus, anything that can be derived
+              should be derived avoiding unnecessary state.
             </p>
           </section>
 
           <p>
-            A derived value is a value that is a result or deducted from actual state.
-            For example the first name (e.g. "Pat") and last name (e.g.
+            A derived value is a value that is a result or deducted from actual
+            state. For example the first name (e.g. "Pat") and last name (e.g.
             "Jenson") of a user might be actual state, but the full name (e.g.
-            "Pat Jenson") is a derivation of two pieces of state added together. The full name
-            itself is not state it is a derivation of state.
+            "Pat Jenson") is a derivation of two pieces of state added together.
+            The full name itself is not state it is a derivation of state.
           </p>
 
           <p>
             Another example might the total number of completed todos in a todo
             application. This number is computed from the list of todos not
-            stored as state itself. 
+            stored as state itself.
           </p>
 
           <p>
